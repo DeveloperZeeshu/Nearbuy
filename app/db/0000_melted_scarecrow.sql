@@ -1,0 +1,20 @@
+CREATE TABLE `shops` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`shop_name` varchar(100) NOT NULL,
+	`owner_name` varchar(100) NOT NULL,
+	`email` varchar(100) NOT NULL,
+	`password` varchar(255) NOT NULL,
+	`phone` varchar(15) NOT NULL,
+	`address` varchar(100) NOT NULL,
+	`city` varchar(50) NOT NULL,
+	`state` varchar(50) NOT NULL,
+	`zip_code` varchar(10) NOT NULL,
+	`latitude` double NOT NULL,
+	`longitude` double NOT NULL,
+	`image_url` text,
+	`is_verified` boolean DEFAULT false,
+	`created_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `shops_id` PRIMARY KEY(`id`),
+	CONSTRAINT `shops_email_unique` UNIQUE(`email`)
+);
