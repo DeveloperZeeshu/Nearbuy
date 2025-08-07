@@ -58,11 +58,13 @@ A full-stack location-based platform that helps users find nearby shops selling 
 ## 📌 Setup & Run Locally
 
 ```bash
-git clone https://github.com/your-username/nearbuy.git
+git clone https://github.com/DeveloperZeeshu/nearbuy.git
 cd nearbuy
 npm install
 # Set up your .env variables (DB, JWT secret, etc.)
 npm run dev
+```
 
-
+## 🙋‍♂️ Author
+Made with ❤️ by Jeesan Abbas
 
