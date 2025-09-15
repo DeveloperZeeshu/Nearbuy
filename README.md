@@ -27,8 +27,6 @@ A full-stack location-based platform that helps users find nearby shops selling 
 - **Authentication**: JWT, Argon2
 - **Database**: MySQL
 - **ORM**: Drizzle ORM
-- **Geolocation & Distance**
-- **Other**: Google Maps API
 
 ---
 
