@@ -27,7 +27,7 @@ A full-stack location-based platform that helps users find nearby shops selling 
 - **Authentication**: JWT, Argon2
 - **Database**: MySQL
 - **ORM**: Drizzle ORM
-- **Geolocation & Distance**: `ST_Distance_Sphere` SQL function
+- **Geolocation & Distance**
 - **Other**: Google Maps API
 
 ---
@@ -43,15 +43,9 @@ A full-stack location-based platform that helps users find nearby shops selling 
 ## 🧭 How It Works
 
 1. **User searches** for a product.
-2. **Backend fetches nearby shops** based on current coordinates using `ST_Distance_Sphere`.
+2. **Backend fetches nearby shops** based on current coordinates.
 3. **Shops are sorted by distance** and displayed with redirection to Maps.
 4. **Shop owners manage their products** via dashboard.
-
----
-
-## 📸 Screenshots
-
-*Add screenshots here if available*
 
 ---
 
