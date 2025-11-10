@@ -25,7 +25,7 @@ A full-stack location-based platform that helps users find nearby shops selling 
 - **Frontend**: React.js, Tailwind CSS, React Hook Form  
 - **Backend**: Node.js, Express.js, Mongoose (MongoDB)  
 - **Authentication**: JWT & Express Sessions  
-- **Database**: MongoDB (Atlas or local)  
+- **Database**: MongoDB  
 - **State Management**: Redux Toolkit  
 
 ---
@@ -41,7 +41,7 @@ A full-stack location-based platform that helps users find nearby shops selling 
 ## 🧭 How It Works
 
 1. **User searches** for a product.  
-2. **Backend fetches nearby shops** using GeoJSON location data in MongoDB.  
+2. **Backend fetches nearby shops** using location data in MongoDB.  
 3. **Products are filtered** by shop proximity, category, and availability.  
 4. **Shops are displayed** with price, distance, and Google Maps links.  
 5. **Shop owners manage products** via secure dashboard.  
