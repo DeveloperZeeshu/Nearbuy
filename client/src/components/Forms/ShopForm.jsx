@@ -6,10 +6,28 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { getCurrentLocation } from '../../utils/getCurrentLocation.js'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-const ShopForm = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm()
+const ShopForm = ({ shopInfo }) => {
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm()
     const navigate = useNavigate()
+    const accessToken = useSelector(state => state.auth.accessToken)
+
+    useEffect(() => {
+        if (shopInfo) {
+            reset({
+                shopName: shopInfo.shopName,
+                ownerName: shopInfo.ownerName,
+                email: shopInfo.email,
+                address: shopInfo.address,
+                phone: shopInfo.phone,
+                city: shopInfo.city,
+                state: shopInfo.state,
+                zipcode: shopInfo.zipcode
+            })
+        }
+    }, [shopInfo, reset])
 
     const submit = async (data) => {
         const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
@@ -23,10 +41,24 @@ const ShopForm = () => {
         const finalData = { ...data, latitude: lat, longitude: lng }
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, finalData, { withCredentials: true })
-            if (res.data.success) {
-                toast.success('Registration successful.')
-                navigate('/login')
+            let res
+            if (shopInfo) {
+                if (!accessToken) {
+                    toast.error('Something went wrong.')
+                }
+                res = await axios.put(`${import.meta.env.VITE_API_URL}/api/shop/updateShop`, finalData, {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                    withCredentials: true
+                })
+                if (res.data.success) {
+                    toast.success('Profile updated successfully.')
+                }
+            } else {
+                res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, finalData, { withCredentials: true })
+                if (res.data.success) {
+                    toast.success('Registration successful.')
+                    navigate('/login')
+                }
             }
         } catch (err) {
             if (err.response) {
@@ -44,8 +76,8 @@ const ShopForm = () => {
         <div className="text-lg shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-7">
 
             <div className="pb-15">
-                <h2 className="text-4xl pb-3 text-center">Register Shop</h2>
-                <p className="text-base">Create your account to get started</p>
+                <h2 className="text-4xl pb-3 text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
+                <p className="text-base">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
             </div>
 
             <form className="w-full flex flex-col space-y-6 max-w-4xl" onSubmit={handleSubmit(submit)}>
@@ -82,6 +114,7 @@ const ShopForm = () => {
                             label='Email'
                             placeholder="Enter your email e.g., xyz@gmail.com"
                             type="email"
+                            disabled={shopInfo}
                             errors={errors.email}
                             {...register('email', {
                                 required: 'Email is required',
@@ -182,19 +215,21 @@ const ShopForm = () => {
                         />
                     </div>
 
-                    <div className="w-full">
-                        <Input
-                            label='Confirm Password'
-                            type="password"
-                            placeholder="Confirm your password"
-                            errors={errors.confirmPassword}
-                            {...register('confirmPassword', {
-                                required: 'Confirm your password',
-                                validate: (value) =>
-                                    value === watch('password') || "Password didn't match"
-                            })}
-                        />
-                    </div>
+                    {
+                        !shopInfo &&
+                        <div className="w-full">
+                            <Input
+                                label='Confirm Password'
+                                type="password"
+                                placeholder="Confirm your password"
+                                errors={errors.confirmPassword}
+                                {...register('confirmPassword', {
+                                    required: 'Confirm your password',
+                                    validate: (value) =>
+                                        value === watch('password') || "Password didn't match"
+                                })}
+                            />
+                        </div>}
                 </div>
                 {/* </div> */}
 
@@ -203,7 +238,9 @@ const ShopForm = () => {
                 />
             </form>
 
-            <p className='mt-4'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>
+            {
+                !shopInfo &&
+                <p className='mt-4'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>}
         </div>
     )
 }

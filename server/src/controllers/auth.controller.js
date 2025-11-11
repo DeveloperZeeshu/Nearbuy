@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
-import { createAccessToken, createRefreshToken, createSession, createShop, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyPassword } from "../services/auth.services.js"
+import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyPassword } from "../services/auth.services.js"
 
 export const postRegisterPage = async (req, res) => {
     const requiredFields = [
@@ -170,8 +170,21 @@ export const getRefreshPage = async (req, res) => {
 
 export const logoutUserPage = async (req, res) => {
     try {
-        if (!req.user)
+        if (!req.userId)
             return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+        const refreshToken = req.cookies.refresh_token
+
+        const hashedToken = hashToken(refreshToken)
+
+        const session = await findSessionByToken({ refreshToken: hashedToken })
+
+        if (!session)
+            return res.status(404).json({ success: false, message: 'Invalid session.' })
+
+        const deletedSession = await deleteSession(session._id)
+        if (!deletedSession)
+            return res.state(501).json({ success: false, message: 'Something went wrong.' })
 
         const baseConfig = { httpOnly: true, secure: false, sameSite: 'lax' }
         res.clearCookie('refresh_token', baseConfig);
@@ -182,4 +195,6 @@ export const logoutUserPage = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
+
+
 

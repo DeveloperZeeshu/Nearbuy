@@ -1,11 +1,17 @@
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../context/AppContext'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../../../services/auth.sevice.js'
+import toast from 'react-hot-toast'
+import { logout } from '../../../store/authSlice.js'
 
 const Header = () => {
     const { openSidebar } = useContext(AppContext)
     const authStatus = useSelector(state => state.auth.status)
+    const accessToken = useSelector(state => state.auth.accessToken)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const navItems = [
         {
@@ -40,6 +46,22 @@ const Header = () => {
         }
     ]
 
+    const handleLogout = async () => {
+        if (!accessToken)
+            return
+        try {
+            const res = await logoutUser(accessToken)
+            if (res.success) {
+                toast.success('Logout successfully.')
+                dispatch(logout())
+                navigate('/')
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error('Error logout user.')
+        }
+    }
+
     return (
         <header className="max-w-[1420px] shadow-xl flex justify-between items-center w-full text-white rounded-b-xl bg-purple-600 px-4 py-4 mx-auto text-lg my-auto">
 
@@ -57,7 +79,7 @@ const Header = () => {
             </nav>
             {
                 authStatus ?
-                    <button>Logout</button>
+                    <button onClick={handleLogout} className='hidden lg:flex'>Logout</button>
                     :
                     <div className={`hidden lg:flex justify-center items-center gap-6`}>
                         <Link to='/login' className="font-medium cursor-pointer">Login</Link>

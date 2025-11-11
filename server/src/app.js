@@ -23,4 +23,3 @@ app.use('/api', shopRoutes)
 app.use('/api/product', productRoute)
 
 export default app
-

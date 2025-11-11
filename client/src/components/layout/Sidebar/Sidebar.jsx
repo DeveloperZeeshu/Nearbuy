@@ -4,12 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoCloseOutline } from 'react-icons/io5'
 import { useContext } from 'react';
 import { AppContext } from '../../../context/AppContext'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../../../services/auth.sevice.js';
+import toast from 'react-hot-toast';
+import {logout} from '../../../store/authSlice.js'
 
 const SideBar = () => {
     const navigate = useNavigate()
     const { closeSidebar } = useContext(AppContext)
     const authStatus = useSelector(state => state.auth.status)
+    const accessToken = useSelector(state => state.auth.accessToken)
+    const dispatch = useDispatch()
 
     const navItems = [
         {
@@ -44,6 +49,22 @@ const SideBar = () => {
         }
     ]
 
+    const handleLogout = async () => {
+        if (!accessToken)
+            return
+        try {
+            const res = await logoutUser(accessToken)
+            if (res.success) {
+                toast.success('Logout successfully.')
+                dispatch(logout())
+                navigate('/')
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error('Error logout user.')
+        }
+    }
+
     return (
         <>
             <aside className='shadow-2xl p-4 text-lg flex flex-col justify-start items-center fixed top-0 left-0 bg-white z-10 h-screen w-[18rem] rounded-r-xl gap-9'>
@@ -52,7 +73,7 @@ const SideBar = () => {
 
                 {
                     authStatus ?
-                        <button>Logout</button>
+                        <button onClick={handleLogout}>Logout</button>
                         :
                         <div className={`flex justify-center items-center gap-5`}>
                             <Link to='/login'
@@ -72,6 +93,7 @@ const SideBar = () => {
                             <Link
                                 key={nav.name}
                                 to={nav.slug}
+                                onClick={closeSidebar}
                                 className={`w-full py-3 text-center  duration-200 rounded-xl `}>
                                 {nav.name}
                             </Link>

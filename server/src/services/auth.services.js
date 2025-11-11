@@ -49,7 +49,7 @@ export const findSessionByToken = async ({ refreshToken }) => {
 
 export const getShopByShopId = async (_id) => {
     try {
-        return await Shop.findById( _id ).select('-password')
+        return await Shop.findById(_id).select('-password')
     } catch (err) {
         console.log(err)
         throw err
@@ -138,6 +138,18 @@ export const createSession = async ({ shopId, userAgent, ip, refreshToken, expir
         })
         session.save()
         return session
+    } catch (err) {
+        console.log(err)
+        throw err
+    }
+}
+
+export const deleteSession = async (_id) => {
+    try {
+        const deletedSession = await Session.findOneAndDelete({ _id })
+        deletedSession.save()
+
+        return deletedSession
     } catch (err) {
         console.log(err)
         throw err

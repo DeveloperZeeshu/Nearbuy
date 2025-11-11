@@ -7,7 +7,6 @@ import {AppContext} from '../../context/AppContext.jsx'
 
 export const ProductTab = ({ p }) => {
     const accessToken = useSelector(state => state.auth.accessToken)
-    const items = useSelector(state => state.products.items)
     const dispatch = useDispatch()
     const {openEditProductForm} = useContext(AppContext)
 

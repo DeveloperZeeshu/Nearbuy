@@ -15,7 +15,7 @@ const ShopLayout = () => {
             <ProtectedRoute>
                 {isProductFormOpen && (
                     <ProductForm
-                        mode={editingProduct ? 'edit' : 'add'}
+                        mode={editingProduct ? 'Edit' : 'Add'}
                         product={editingProduct}
                         onSuccess={() => {
                             closeProductForm()

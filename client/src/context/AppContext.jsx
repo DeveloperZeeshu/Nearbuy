@@ -9,6 +9,7 @@ const AppProvider = ({ children }) => {
 
     const openProductForm = () => {
         setIsProductFormOpen(true)
+        setEditingProduct(null)
     }
 
     const closeProductForm = () => {
