@@ -11,7 +11,7 @@ const app = express()
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'https://nearbuy-kg27nr32l-zeeshaans-projects-48c745d3.vercel.app/'
+        "https://nearbuy-frontend.vercel.app"
     ],
     credentials: true
 }))
