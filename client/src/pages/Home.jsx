@@ -4,7 +4,7 @@ import Input from '../components/ui/Input'
 import Button from "../components/ui/Button"
 import { getCurrentLocation } from '../utils/getCurrentLocation.js'
 import { useForm } from 'react-hook-form'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
     const { register, handleSubmit } = useForm();
@@ -41,18 +41,24 @@ const Home = () => {
                 <Input
                     type="search"
                     placeholder="Search for products…"
-                    {...register('query')}
+                    {...register('query', {
+                        required: true
+                    })}
                 />
 
                 {/* 📂 Category */}
                 <Select
                     options={['All Categories', 'Groceries', 'Electronics', 'Clothing']}
-                    {...register('category')}
+                    {...register('category', {
+                        required: true
+                    })}
                 />
 
                 {/* 📏 Radius */}
                 <select
-                    {...register('radius')}
+                    {...register('radius', {
+                        required: true
+                    })}
                     defaultValue="5000"
                     className="border-2 border-gray-400 text-lg rounded-lg p-2"
                 >

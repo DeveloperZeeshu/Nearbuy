@@ -9,7 +9,10 @@ import { productRoute } from './routes/product.routes.js'
 const app = express()
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'https://nearbuy-kg27nr32l-zeeshaans-projects-48c745d3.vercel.app/'
+    ],
     credentials: true
 }))
 
