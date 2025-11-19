@@ -22,4 +22,8 @@ app.use('/api', authRoutes)
 app.use('/api', shopRoutes)
 app.use('/api/product', productRoute)
 
+app.get('/', (req,res) => {
+    res.send('Nearbuy backend is running...')
+})
+
 export default app
