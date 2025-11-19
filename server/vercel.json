@@ -2,19 +2,15 @@
     "version": 2,
     "builds": [
         {
-            "src": "/src/server.js",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "dist/**"
-                ]
-            }
+            "src": "server/src/server.js",
+            "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/src/erver.js"
+            "dest": "server/src/erver.js"
         }
     ]
 }
+
