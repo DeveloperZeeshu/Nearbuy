@@ -112,11 +112,12 @@ export const postLoginPage = async (req, res) => {
         if (!accessToken)
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
-        const baseConfig = { httpOnly: true, secure: false, sameSite: 'lax' }
+        const baseConfig = { httpOnly: true, secure: true, sameSite: 'none' }
 
         res.cookie('refresh_token', refreshToken, {
             ...baseConfig,
-            maxAge: REFRESH_TOKEN_EXPIRY
+            maxAge: REFRESH_TOKEN_EXPIRY,
+            path: '/'
         })
 
         return res.status(200).json({
@@ -186,7 +187,7 @@ export const logoutUserPage = async (req, res) => {
         if (!deletedSession)
             return res.state(501).json({ success: false, message: 'Something went wrong.' })
 
-        const baseConfig = { httpOnly: true, secure: false, sameSite: 'lax' }
+        const baseConfig = { httpOnly: true, secure: true, sameSite: 'sone' }
         res.clearCookie('refresh_token', baseConfig);
 
         return res.status(200).json({ success: true, message: 'User logout successfully.' })
@@ -195,6 +196,4 @@ export const logoutUserPage = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
-
-
 
