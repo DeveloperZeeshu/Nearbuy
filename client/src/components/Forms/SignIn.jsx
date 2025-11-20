@@ -36,11 +36,11 @@ const SignIn = () => {
 
     return (
         <>
-            <div className="text-lg shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-7">
+            <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
 
                 <div className="pb-13">
-                    <h2 className="text-4xl pb-3 text-center">Register Shop</h2>
-                    <p className="text-base">Create your account to get started</p>
+                    <h2 className="text-2xl font-bold text-center">Register Shop</h2>
+                    <p className="text-base text-gray-500">Create your account to get started</p>
                 </div>
 
                 <form className="w-full flex flex-col lg:w-108 space-y-6" onSubmit={handleSubmit(submit)}>
@@ -75,7 +75,7 @@ const SignIn = () => {
                                 }
                             })}
                         />
-                        <p className="cursor-pointer -mt-6 text-blue-600 text-right text-[1rem]">Forgot Password?</p>
+                        <p className="cursor-pointer -mt-6 text-blue-600 text-right text-sm">Forgot Password?</p>
                     </div>
 
                     <Button
@@ -83,7 +83,7 @@ const SignIn = () => {
                     />
                 </form>
 
-                <p className='mt-5'>Don't have an account? <Link to='/register' className=" text-blue-600 cursor-pointer">Register now</Link></p>
+                <p className='mt-5 text-sm'>Don't have an account? <Link to='/register' className=" text-blue-600 cursor-pointer">Register now</Link></p>
             </div>
         </>
     )

@@ -1,7 +1,7 @@
 
 const Container = ({children}) => {
     return (
-        <div className="max-w-[1420px] justify-center flex text-lg items-center px-8 py-16 gap-10 mx-auto my-auto flex-col">
+        <div className="max-w-7xl justify-center flex items-center lg:px-6 py-12 gap-10 mx-auto my-auto">
             {children}
         </div>
     )

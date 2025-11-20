@@ -26,7 +26,7 @@ export const ProductForm = ({ product, mode }) => {
     } else {
       reset({
         productName: '',
-        category: '',
+        category: 'All Categories',
         description: '',
         price: '',
       });
@@ -85,8 +85,8 @@ export const ProductForm = ({ product, mode }) => {
   };
   return (
     <>
-      <div className="z-20 text-lg w-auto fixed flex flex-col items-center justify-center bg-[white] top-40 rounded-3xl p-4 shadow-xl">
-        <p onClick={closeProductForm} className="flex justify-end w-full"><IoCloseOutline className="text-3xl cursor-pointer mb-1" /></p>
+      <div className="z-20 w-auto fixed flex flex-col items-center justify-center bg-[white] top-40 rounded-lg p-4 shadow-xl">
+        <p className="flex justify-end w-full"><IoCloseOutline className="text-3xl cursor-pointer mb-1" onClick={closeProductForm} /></p>
         <form
           onSubmit={handleSubmit(submit)}
           className="min-w-[20rem] w-auto lg:w-120 gap-4 flex flex-col"

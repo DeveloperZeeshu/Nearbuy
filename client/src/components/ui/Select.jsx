@@ -9,16 +9,16 @@ const Select = React.forwardRef(({
 }, ref) => {
     const id = useId()
     return (
-        <div>
+        <div className="flex flex-col">
             <label
                 htmlFor={id}
-                className="pb-[.8rem]">
+                className="">
                 {label}
             </label>
 
             <select
                 id={id}
-                className={`border-2 border-gray-400 text-lg rounded-lg focus:outline-none p-2 cursor-pointer overflow-x-hidden ${className}`}
+                className={`border border-gray-300 rounded-lg focus:outline-none px-3 py-2.5 cursor-pointer overflow-x-hidden ${className}`}
                 {...props}
                 ref={ref}>
                 {

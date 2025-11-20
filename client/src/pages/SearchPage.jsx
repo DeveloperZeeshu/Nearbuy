@@ -49,33 +49,34 @@ const SearchPage = () => {
     return (
         <>
             <Container>
+                <div>
+                    <div className="flex flex-col justify-center items-center mb-6">
+                        <h2 className="text-2xl font-bold">🔍Find What You Need, Nearby.</h2>
+                        <p className="text-gray-500">Showing products available near your location.</p>
+                    </div>
 
-                <div className="flex flex-col justify-center items-center">
-                    <h2 className="text-2xl font-bold mb-4">🔍Find What You Need, Nearby.</h2>
-                    <p className="text-gray-500">Showing products available near your location.</p>
+                    {loading ? <div>Loading...</div> :
+                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {
+                                products && products.map((s) => (
+                                    <ProductCard
+                                        key={s._id}
+                                        prodInfo={{
+                                            id: s._id,
+                                            name: s.name,
+                                            price: s.price,
+                                            description: s.description,
+                                            img: s.image,
+                                            shopName: s.shopId?.shopName,
+                                            address: s.shopId?.address,
+                                            phone: s.shopId?.phone,
+                                            lat: s.shopId?.location?.coordinates[0],
+                                            lng: s.shopId?.location?.coordinates[1]
+                                        }}
+                                    />
+                                ))}
+                        </ul>}
                 </div>
-
-                {loading ? <div>Loading...</div> :
-                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {
-                            products && products.map((s) => (
-                                <ProductCard
-                                    key={s._id}
-                                    prodInfo={{
-                                        id: s._id,
-                                        name: s.name,
-                                        price: s.price,
-                                        description: s.description,
-                                        img: s.image,
-                                        shopName: s.shopId?.shopName,
-                                        address: s.shopId?.address,
-                                        phone: s.shopId?.phone,
-                                        lat: s.shopId?.location?.coordinates[0],
-                                        lng: s.shopId?.location?.coordinates[1]
-                                    }}
-                                />
-                            ))}
-                    </ul>}
             </Container>
         </>
     )

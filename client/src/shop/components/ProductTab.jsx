@@ -59,18 +59,18 @@ export const ProductTab = ({ p }) => {
 
     return (
         <>
-            <div className="border flex flex-col text-lg lg:flex-row justify-between items-center gap-6 border-gray-300 p-4 rounded-xl bg-white">
+            <div className="border flex flex-col lg:flex-row justify-between items-center gap-6 border-gray-300 p-4 rounded-lg bg-white">
                 <div className="flex items-center justify-center gap-6">
                     <img src={p?.image || `https://placehold.co/400x400?text=${p?.name}`} alt={p?.name} className="h-13 w-13 rounded" loading="lazy" />
                     <div>
-                        <div className="font-semibold">{p.name}</div>
-                        <div className="text-gray-500 text-sm">{p.description}</div>
+                        <p className="font-semibold">{p.name}</p>
+                        <p className="text-gray-500 text-sm">{p.description}</p>
                     </div>
                 </div>
                 <div className="flex flex-col gap-6 lg:gap-4 lg:flex-row">
                     <div className="text-gray-700 text-end justify-center items-center flex gap-6 lg:gap-4 space-y-1">
                         <span>₹{p?.price}</span>
-                        <span className={`px-3 text-sm py-1 ${p?.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded-full`}>{p?.isAvailable ? 'In stock' : 'Out of stock'}</span>
+                        <span className={`px-2 text-sm py-1 ${p?.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded-full`}>{p?.isAvailable ? 'In stock' : 'Out of stock'}</span>
                     </div>
 
                     <div className="flex items-center justify-center gap-6">

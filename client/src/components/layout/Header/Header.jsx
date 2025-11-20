@@ -63,7 +63,7 @@ const Header = () => {
     }
 
     return (
-        <header className="max-w-[1420px] shadow-xl flex justify-between items-center w-full text-white rounded-b-xl bg-purple-600 px-4 py-4 mx-auto text-lg my-auto">
+        <header className="max-w-8xl shadow-xl flex justify-between items-center w-full text-white rounded-b-xl bg-purple-600 px-4 py-4 mx-auto my-auto">
 
             <div className="flex w-full lg:w-auto justify-between lg:justify-center items-center">
                 <button onClick={openSidebar} className="text-2xl cursor-pointer lg:hidden">☰</button>

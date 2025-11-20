@@ -39,7 +39,7 @@ const DashboardPage = () => {
     return (
         <>
             <Container>
-                <div className="w-full rounded-xl flex flex-col gap-4 shadow-xl p-4">
+                <div className="w-full rounded-lg flex flex-col gap-4 shadow-xl p-4">
                     <StatCard ownerName={shop?.ownerName} />
 
                     <div className="flex flex-col lg:flex-row gap-4">
@@ -49,19 +49,19 @@ const DashboardPage = () => {
                             <QuickStats />
                         </div>
 
-                        <div className="text-lg flex flex-col gap-4">
+                        <div className="flex flex-col gap-4">
                             <Products shopId={shop?._id} />
                             <div className="grid md:grid-cols-2 gap-4">
-                                <div className="bg-white border border-gray-300 rounded-xl p-5">
+                                <div className="bg-white border border-gray-300 rounded-lg p-4">
                                     <h3 className="font-bold mb-9">Recent Orders</h3>
                                 </div>
-                                <div className="bg-white border border-gray-300 rounded-xl p-5">
+                                <div className="bg-white border border-gray-300 rounded-lg p-4">
                                     <h3 className="font-bold mb-9">Quick Actions</h3>
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <button className="bg-gray-100 py-2 text-lg font-semibold hover:bg-gray-200 px-3 rounded-lg text-center">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button className="bg-gray-100 py-2 font-semibold hover:bg-gray-200 px-3 rounded-lg text-center">
                                             Update Hours
                                         </button>
-                                        <button className="bg-gray-100 py-2 text-lg font-semibold hover:bg-gray-200 px-3 rounded-lg text-center">
+                                        <button className="bg-gray-100 py-2 font-semibold hover:bg-gray-200 px-3 rounded-lg text-center">
                                             View Analytics
                                         </button>
                                     </div>

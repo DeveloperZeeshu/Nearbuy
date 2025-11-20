@@ -73,14 +73,14 @@ const ShopForm = ({ shopInfo }) => {
     }
 
     return (
-        <div className="text-lg shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-7">
+        <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
 
             <div className="pb-15">
-                <h2 className="text-4xl pb-3 text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
-                <p className="text-base">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
+                <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
+                <p className="text-base text-gray-500">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
             </div>
 
-            <form className="w-full flex flex-col space-y-6 max-w-4xl" onSubmit={handleSubmit(submit)}>
+            <form className="w-full flex flex-col space-y-5 max-w-4xl" onSubmit={handleSubmit(submit)}>
                 {/* <div className="w-full"> */}
                 <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
                     <div className="w-full">
@@ -95,7 +95,7 @@ const ShopForm = ({ shopInfo }) => {
                         />
                     </div>
 
-                    <div className="w-full">
+                    <div className="w-full mt-5 lg:mt-0">
                         <Input
                             label='Owner Name'
                             type="text"
@@ -125,7 +125,7 @@ const ShopForm = ({ shopInfo }) => {
                             })}
                         />
                     </div>
-                    <div className="w-full">
+                    <div className="w-full mt-5 lg:mt-0">
                         <Input
                             label='Phone'
                             placeholder="Enter your phone"
@@ -155,7 +155,7 @@ const ShopForm = ({ shopInfo }) => {
                         />
                     </div>
 
-                    <div className="w-full flex space-x-5">
+                    <div className="w-full flex mt-5 lg:mt-0 space-x-4">
                         <div>
                             <Select
                                 label='City'
@@ -217,7 +217,7 @@ const ShopForm = ({ shopInfo }) => {
 
                     {
                         !shopInfo &&
-                        <div className="w-full">
+                        <div className="w-full mt-5 lg:mt-0">
                             <Input
                                 label='Confirm Password'
                                 type="password"
@@ -240,7 +240,7 @@ const ShopForm = ({ shopInfo }) => {
 
             {
                 !shopInfo &&
-                <p className='mt-4'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>}
+                <p className='mt-4 text-sm'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>}
         </div>
     )
 }

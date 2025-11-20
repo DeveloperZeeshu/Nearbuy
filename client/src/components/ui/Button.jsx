@@ -8,7 +8,7 @@ const Button = React.forwardRef(({
     ...props
 }, ref) => {
     return <button
-        className={`cursor-pointer text-white bg-purple-600 hover:bg-purple-500 py-[.6rem] text-lg font-medium px-5 rounded-lg ${className}`}
+        className={`cursor-pointer text-white bg-purple-600 hover:bg-purple-500 py-2.5 font-medium px-4 rounded-lg ${className}`}
         type={type}
         ref={ref}
         {...props}
