@@ -39,8 +39,8 @@ const SignIn = () => {
             <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
 
                 <div className="pb-13">
-                    <h2 className="text-2xl font-bold text-center">Register Shop</h2>
-                    <p className="text-base text-gray-500">Create your account to get started</p>
+                    <h2 className="text-2xl font-bold text-center">Login</h2>
+                    <p className="text-base text-gray-500">Sign in to your account</p>
                 </div>
 
                 <form className="w-full flex flex-col lg:w-108 space-y-6" onSubmit={handleSubmit(submit)}>

@@ -7,7 +7,7 @@ import { AppContext } from '../../../context/AppContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../../../services/auth.sevice.js';
 import toast from 'react-hot-toast';
-import {logout} from '../../../store/authSlice.js'
+import { logout } from '../../../store/authSlice.js'
 
 const SideBar = () => {
     const navigate = useNavigate()
@@ -67,9 +67,9 @@ const SideBar = () => {
 
     return (
         <>
-            <aside className='shadow-2xl p-4 text-lg flex flex-col justify-start items-center fixed top-0 left-0 bg-white z-10 h-screen w-[18rem] rounded-r-xl gap-9'>
+            <aside className='shadow-2xl p-4 flex flex-col justify-start items-center fixed top-0 left-0 bg-white z-10 h-screen w-[18rem] rounded-r-xl gap-9'>
 
-                <p onClick={closeSidebar} className="flex justify-end w-full"><IoCloseOutline className="text-4xl cursor-pointer" /></p>
+                <p className="flex justify-end w-full"><IoCloseOutline className="text-4xl cursor-pointer" onClick={closeSidebar} /></p>
 
                 {
                     authStatus ?
