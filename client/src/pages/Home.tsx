@@ -1,0 +1,85 @@
+import Container from "../components/container/Container.tsx"
+import Select from '../components/ui/Select.tsx'
+import Input from '../components/ui/Input.tsx'
+import Button from "../components/ui/Button.tsx"
+import { getCurrentLocation } from '../utils/getCurrentLocation.ts'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+
+interface FormData {
+    query: string
+    category: string
+    radius: number
+}
+
+const Home = () => {
+    const { register, handleSubmit } = useForm<FormData>();
+    const navigate = useNavigate()
+
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
+        const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
+        if (!userRes) return
+
+        const { lat, lng } = await getCurrentLocation()
+
+        if (!lat || !lng)
+            return
+
+        navigate(
+            `/search?query=${encodeURIComponent(data.query)}&category=${encodeURIComponent(
+                data.category
+            )}&radius=${data.radius}&lat=${lat}&lng=${lng}`
+        );
+    };
+    return (
+        <Container>
+            <div>
+                <div className="flex flex-col justify-center items-center mb-3">
+                    <h2 className="text-2xl text-center font-bold">Find What You Need, Near You 🛒</h2>
+
+                    <p className="text-gray-500 text-center">Search across local shops to find items in stock now</p>
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex flex-col shadow-lg p-4 rounded-lg lg:flex-row justify-center items-center gap-4"
+                >
+                    {/* Search Input */}
+                    <Input
+                        type="search"
+                        placeholder="Search for products…"
+                        {...register('query', {
+                            required: true
+                        })}
+                    />
+
+                    {/* Category */}
+                    <Select
+                        options={['All Categories', 'Groceries', 'Electronics', 'Clothing']}
+                        {...register('category', {
+                            required: true
+                        })}
+                    />
+
+                    {/* Radius */}
+                    <select
+                        {...register('radius', {
+                            required: true
+                        })}
+                        defaultValue="5000"
+                        className="border border-gray-300 rounded-lg px-3 py-2.5"
+                    >
+                        <option value="5000">Within 5 km</option>
+                        <option value="10000">Within 10 km</option>
+                        <option value="25000">Within 25 km</option>
+                    </select>
+
+                    <Button type="submit" text='Search' />
+                </form>
+            </div>
+        </Container>
+    )
+}
+
+export default Home
+

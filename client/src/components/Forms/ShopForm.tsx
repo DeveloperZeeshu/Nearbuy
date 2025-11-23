@@ -1,0 +1,262 @@
+import Button from '../ui/Button.js'
+import Input from '../ui/Input.js'
+import Select from '../ui/Select.js'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { getCurrentLocation } from '../../utils/getCurrentLocation.js'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../../store/store.js'
+import { handleAxiosError } from '../../utils/handleAxiosError.js'
+import type { ShopInfo } from '../../types/shop.types.js'
+
+interface FormData {
+    shopName: string
+    ownerName: string
+    email: string
+    phone: number
+    address: string
+    city: string
+    state: string
+    zipcode: number
+    password: string
+    confirmPassword: string
+}
+
+interface ShopInfoProps {
+    shopInfo?: ShopInfo | null
+}
+
+const ShopForm = ({ shopInfo }: ShopInfoProps) => {
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<FormData>()
+    const navigate = useNavigate()
+    const accessToken = useSelector((state: RootState) => state.auth.accessToken)
+
+    useEffect(() => {
+        if (shopInfo) {
+            reset({
+                shopName: shopInfo.shopName,
+                ownerName: shopInfo.ownerName,
+                email: shopInfo.email,
+                address: shopInfo.address,
+                phone: shopInfo.phone,
+                city: shopInfo.city,
+                state: shopInfo.state,
+                zipcode: shopInfo.zipcode
+            })
+        }
+    }, [shopInfo, reset])
+
+    const submit: SubmitHandler<FormData> = async (data) => {
+        const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
+        if (!userRes) return
+
+        const { lat, lng } = await getCurrentLocation()
+
+        if (!lat || !lng)
+            return
+
+        const finalData = { ...data, latitude: lat, longitude: lng }
+
+        try {
+            let res
+            if (shopInfo) {
+                if (!accessToken) {
+                    toast.error('Something went wrong.')
+                }
+                res = await axios.put(`${import.meta.env.VITE_API_URL}/api/shop/updateShop`, finalData, {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                    withCredentials: true
+                })
+                if (res?.data?.success) {
+                    toast.success('Profile updated successfully.')
+                }
+            } else {
+                res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, finalData, { withCredentials: true })
+                if (res?.data?.success) {
+                    toast.success('Registration successful.')
+                    navigate('/login')
+                }
+            }
+        } catch (err: unknown) {
+            handleAxiosError(err)
+        }
+    }
+
+    return (
+        <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
+
+            <div className="pb-15">
+                <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
+                <p className="text-base text-gray-500">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
+            </div>
+
+            <form className="w-full flex flex-col space-y-5 max-w-4xl" onSubmit={handleSubmit(submit)}>
+                {/* <div className="w-full"> */}
+                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                    <div className="w-full">
+                        <Input
+                            label='Shop Name'
+                            type="text"
+                            placeholder="Enter your shop name"
+                            errors={errors.shopName}
+                            {...register('shopName', {
+                                required: 'Shop name is required'
+                            })}
+                        />
+                    </div>
+
+                    <div className="w-full mt-5 lg:mt-0">
+                        <Input
+                            label='Owner Name'
+                            type="text"
+                            placeholder="Enter the owner name"
+                            errors={errors.ownerName}
+                            {...register('ownerName', {
+                                required: 'Owner name is required'
+                            })}
+                        />
+                    </div>
+                </div>
+
+                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                    <div className="w-full">
+                        <Input
+                            label='Email'
+                            placeholder="Enter your email e.g., xyz@gmail.com"
+                            type="email"
+                            disabled={!!shopInfo}
+                            errors={errors.email}
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: 'Invalid email address'
+                                }
+                            })}
+                        />
+                    </div>
+                    <div className="w-full mt-5 lg:mt-0">
+                        <Input
+                            label='Phone'
+                            placeholder="Enter your phone"
+                            type="text"
+                            errors={errors.phone}
+                            {...register('phone', {
+                                required: 'Phone number is required',
+                                pattern: {
+                                    value: /^[0-9]{10}$/,
+                                    message: 'Phone number must be exactly 10 digits'
+                                }
+                            })}
+                        />
+                    </div>
+                </div>
+
+                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                    <div className="w-full">
+                        <Input
+                            type="text"
+                            label='Address'
+                            placeholder="Shop no., street"
+                            errors={errors.address}
+                            {...register('address', {
+                                required: 'Address is required'
+                            })}
+                        />
+                    </div>
+
+                    <div className="w-full flex mt-5 lg:mt-0 space-x-4">
+                        <div>
+                            <Select
+                                label='City'
+                                options={['Jaipur']}
+                                errors={errors.city}
+                                {...register('city', {
+                                    required: 'City is required'
+                                })}
+                            />
+                        </div>
+                        <div>
+                            <Select
+                                label='State'
+                                options={['Rajasthan']}
+                                errors={errors.state}
+                                {...register('state', {
+                                    required: 'State is required'
+                                })}
+                            />
+                        </div>
+                        <div>
+                            <Input
+                                type='text'
+                                label='Zip code'
+                                placeholder="e.g., 302001"
+                                errors={errors.zipcode}
+                                {...register('zipcode', {
+                                    required: 'Zipcode is required',
+                                    pattern: {
+                                        value: /^[1-9][0-9]{5}$/,
+                                        message: 'Zipcode must be a valid 6-digit number'
+                                    }
+                                })}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex w-full flex-col gap-0 lg:gap-5 lg:flex-row justify-center">
+                    <div className="w-full">
+                        <Input
+                            label='Enter Password'
+                            type="password"
+                            placeholder="Enter your password"
+                            errors={errors.password}
+                            {...register('password', {
+                                required: 'Enter a password',
+                                minLength: {
+                                    value: 8,
+                                    message: 'Password must be atleast 8 characters long'
+                                },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+                                    message: 'Password must contain uppercase, lowercase, number, and special character'
+                                }
+                            })}
+                        />
+                    </div>
+
+                    {
+                        !shopInfo &&
+                        <div className="w-full mt-5 lg:mt-0">
+                            <Input
+                                label='Confirm Password'
+                                type="password"
+                                placeholder="Confirm your password"
+                                errors={errors.confirmPassword}
+                                {...register('confirmPassword', {
+                                    required: 'Confirm your password',
+                                    validate: (value) =>
+                                        value === watch('password') || "Password didn't match"
+                                })}
+                            />
+                        </div>}
+                </div>
+                {/* </div> */}
+
+                <Button
+                    type="submit"
+                />
+            </form>
+
+            {
+                !shopInfo &&
+                <p className='mt-4 text-sm'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>}
+        </div>
+    )
+}
+
+export default ShopForm
+
