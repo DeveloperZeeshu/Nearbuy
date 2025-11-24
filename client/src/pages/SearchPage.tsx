@@ -78,7 +78,7 @@ const SearchPage = () => {
         <>
             <Container>
                 <div>
-                    <div className="flex flex-col justify-center items-center mb-6">
+                    <div className="flex flex-col justify-center items-center px-3 mb-6">
                         <h2 className="text-2xl text-center font-bold">🔍Find What You Need, Nearby.</h2>
                         <p className="text-gray-500 text-center">Showing products available near your location.</p>
                     </div>

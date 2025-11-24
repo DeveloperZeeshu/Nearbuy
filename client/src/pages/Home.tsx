@@ -34,7 +34,7 @@ const Home = () => {
     return (
         <Container>
             <div>
-                <div className="flex flex-col justify-center items-center mb-3">
+                <div className="flex flex-col justify-center items-center mb-3 px-3">
                     <h2 className="text-2xl text-center font-bold">Find What You Need, Near You 🛒</h2>
 
                     <p className="text-gray-500 text-center">Search across local shops to find items in stock now</p>

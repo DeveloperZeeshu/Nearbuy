@@ -32,7 +32,8 @@ const SessionSchema = new Schema<ISession>({
         required: true
     },
     refreshToken: {
-        type: String, required: true
+        type: String, 
+        required: true
     },
     expiresAt: {
         type: Date,

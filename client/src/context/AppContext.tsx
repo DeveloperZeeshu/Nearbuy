@@ -1,4 +1,4 @@
-import { createContext, useState, type ReactNode } from "react";
+import React, { createContext, useState, type ReactNode } from "react";
 import type { ProductTabDetails } from "../types/product.types";
 
 interface AppProviderProps {
@@ -8,7 +8,9 @@ interface AppProviderProps {
 interface AppContextType {
     isProductFormOpen: boolean
     isSidebarOpen: boolean
+    loading: boolean
     editingProduct: ProductTabDetails | null
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
     openSidebar: () => void
     closeSidebar: () => void
     openProductForm: () => void
@@ -22,6 +24,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
     const [isProductFormOpen, setIsProductFormOpen] = useState<boolean>(false)
     const [editingProduct, setEditingProduct] = useState<ProductTabDetails | null>(null)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const openProductForm = () => {
         setIsProductFormOpen(true)
@@ -53,7 +56,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
         closeSidebar,
         openEditProductForm,
         editingProduct,
-        closeProductForm
+        closeProductForm,
+        setLoading,
+        loading
     }}>
         {children}
     </AppContext.Provider>

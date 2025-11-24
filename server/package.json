@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/server.ts",
+    "dev": "bun  --env-file=.env.development --watch src/server.ts",
     "build": "bun build ./src/server.ts --outdir ./dist",
-    "start": "bun src/server.ts"
+    "start": "bun --env-file=.env.production dist/server.ts"
   },
   "dependencies": {
     "argon2": "^0.44.0",
@@ -16,6 +16,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3",
     "multer": "^2.0.2",

@@ -1,11 +1,21 @@
 
-import { useCallback, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useCallback, useContext, useEffect, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { login, logout } from "../store/authSlice.js"
 import axios from "axios"
+import type { RootState } from "../store/store.js"
+import { AppContext } from "../context/AppContext.js"
 
 export const useUserLoader = () => {
+    const context = useContext(AppContext)
+    if (!context)
+        throw new Error('Context Error.')
+
+    const { setLoading } = context
+
     const dispatch = useDispatch()
+    const status = useSelector((state: RootState) => state.auth.status)
+    const hasChecked = useRef(false)
 
     const fetchRefreshToken = useCallback(async () => {
         try {
@@ -19,12 +29,17 @@ export const useUserLoader = () => {
         } catch (err) {
             // console.log(err)
             dispatch(logout())
+        } finally {
+            setLoading(false)
         }
 
     }, [dispatch])
 
     useEffect(() => {
-        fetchRefreshToken()
-    }, [fetchRefreshToken])
+        if (!status && !hasChecked.current) {
+            hasChecked.current = true
+            fetchRefreshToken()
+        }
+    }, [status, fetchRefreshToken])
 }
 

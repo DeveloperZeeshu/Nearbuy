@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../../../services/auth.sevice.js'
 import toast from 'react-hot-toast'
 import { logout } from '../../../store/authSlice.js'
-import type { RootState } from '../../../store/store.js'
+import type { AppDispatch, RootState } from '../../../store/store.js'
 import Button from '../../ui/Button.js'
 import { IoLogOutOutline } from 'react-icons/io5'
+import Container from '../../container/Container.js'
 
 interface NavItem {
     name: string
@@ -20,12 +21,12 @@ const Header = () => {
     if (!context)
         throw new Error('Context Error.')
 
-    const { openSidebar } = context
+    const { openSidebar, loading } = context
 
     const authStatus = useSelector((state: RootState) => state.auth.status)
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const navItems: NavItem[] = [
         {
@@ -75,6 +76,13 @@ const Header = () => {
             toast.error('Error logout user.')
         }
     }
+
+    if (loading)
+        return (
+            <div className='p-4 max-w-8xl w-full flex justify-center items-center'>
+                <div className="w-8 text-center h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+            </div>
+        )
 
     return (
         <header className="max-w-8xl shadow-xl z-20 flex justify-between items-center w-full rounded-b-xl bg-white px-4 py-4 mx-auto my-auto fixed">

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
 import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyPassword } from "../services/auth.services.js"
+import Session from "../models/session.model.js";
+import { baseConfig } from "../conf/cookieBaseConfig.js";
 
 export const postRegisterPage = async (req: Request, res: Response) => {
     const requiredFields = [
@@ -91,7 +93,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
 
         const refreshToken = createRefreshToken()
         if (!refreshToken)
-            return res.status(500).json({success: false, message: 'Something went wrong.'})
+            return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
         const session = await createSession({
             shopId: shop._id as string,
@@ -113,12 +115,9 @@ export const postLoginPage = async (req: Request, res: Response) => {
         if (!accessToken)
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
-        const baseConfig = { httpOnly: true, secure: true, sameSite: 'none' as 'none' }
-
         res.cookie('refresh_token', refreshToken, {
             ...baseConfig,
             maxAge: REFRESH_TOKEN_EXPIRY,
-            path: '/'
         })
 
         return res.status(200).json({
@@ -140,19 +139,44 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         const refreshToken = req.cookies.refresh_token
 
         if (!refreshToken)
-            return res.status(404).json({ success: false, message: 'Token not found.' })
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         const hashedToken = hashToken(refreshToken)
         const session = await findSessionByToken(hashedToken)
 
-        if (!session)
-            return res.status(400).json({ success: false, message: 'Invalid session.' })
+        if (!session) {
+            res.clearCookie('refresh_token', baseConfig)
+
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
+        }
 
         const shop = await getShopByShopId(session.shopId.toString())
 
         if (!shop)
-            return res.status(404).json({ success: false, message: 'User not found.' })
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
+        //refreshing Refresh Token
+        const newRefreshToken = createRefreshToken()
+        const newHashedToken = hashToken(newRefreshToken)
+
+        const updatedSession = await Session.findOneAndUpdate(
+            { _id: session._id },
+            {
+                refreshToken: newHashedToken
+            },
+            { new: true }
+        )
+        if (!updatedSession)
+            return res.status(500).json({ success: false, message: 'Something went wrong.' })
+
+        res.clearCookie('refresh_token', baseConfig)
+
+        res.cookie('refresh_token', newRefreshToken, {
+            ...baseConfig,
+            maxAge: session.expiresAt.getTime() - Date.now(),
+        })
+
+        // refreshing Access Token
         const accessToken = await createAccessToken({
             sub: shop._id as string,
             name: shop.ownerName,
@@ -162,7 +186,13 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         if (!accessToken)
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
-        return res.status(200).json({ success: true, accessToken, sub: shop._id, ownerName: shop.ownerName, email: shop.email })
+        return res.status(200).json({
+            success: true,
+            accessToken,
+            sub: shop._id,
+            ownerName: shop.ownerName,
+            email: shop.email
+        })
 
     } catch (err) {
         // console.log(err)
@@ -188,7 +218,6 @@ export const logoutUserPage = async (req: Request, res: Response) => {
         if (!deletedSession)
             return res.status(501).json({ success: false, message: 'Something went wrong.' })
 
-        const baseConfig = { httpOnly: true, secure: true, sameSite: 'none' as 'none' }
         res.clearCookie('refresh_token', baseConfig);
 
         return res.status(200).json({ success: true, message: 'User logout successfully.' })
@@ -197,4 +226,5 @@ export const logoutUserPage = async (req: Request, res: Response) => {
         return res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
+
 

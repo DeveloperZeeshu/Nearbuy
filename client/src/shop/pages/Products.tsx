@@ -15,7 +15,7 @@ const ManageProducts = () => {
         <>
             <Container>
                 <div className="flex flex-col gap-4">
-                    <div className="flex flex-col justify-center items-center text-center">
+                    <div className="flex flex-col justify-center items-center text-center px-3">
                         <h2 className="text-2xl font-bold">Manage your Inventory 🧩</h2>
                         <p className="text-gray-500 mb-6">View, update, and manage all your shop's products in one place.</p>
                     </div>
