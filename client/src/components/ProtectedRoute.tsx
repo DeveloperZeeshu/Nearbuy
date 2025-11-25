@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
 
     if (!accessToken)
-        <Navigate to='/' replace />
+        return <Navigate to='/' replace />
 
     return children
 }
