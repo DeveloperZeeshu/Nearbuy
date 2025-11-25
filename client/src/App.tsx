@@ -26,7 +26,7 @@ const App = () => {
         )
       }
 
-      <aside className={`fixed top-0 left-0 h-screen w-64 transform z-30 bg-white transition-transform duration-300 rounded-r-xl ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed top-0 left-0 h-screen w-74 transform z-30 bg-white transition-transform duration-300 rounded-r-xl ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar />
       </aside>
 

@@ -91,7 +91,7 @@ const SideBar = () => {
 
     return (
         <>
-            <aside className='shadow-2xl text-sm p-4 flex flex-col justify-start bg-white h-full w-full rounded-r-lg gap-9'>
+            <aside className='shadow-2xl p-4 flex flex-col justify-start bg-white h-full w-full rounded-r-lg gap-9'>
 
                 <p className="flex justify-end w-full"><IoCloseOutline className="text-2xl cursor-pointer" onClick={closeSidebar} /></p>
 
