@@ -26,7 +26,7 @@ interface SearchedProductInfo {
 const SearchPage = () => {
     const [searchParams] = useSearchParams()
     const [products, setProducts] = useState<SearchedProductInfo[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const fetchProducts = async () => {

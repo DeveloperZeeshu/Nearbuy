@@ -59,16 +59,16 @@ const SideBar = () => {
             active: authStatus
         },
         {
-            name: 'About',
-            slug: '/about',
-            icon: IoIosLink,
-            active: true
-        },
-        {
             name: 'Shops',
             slug: '/shops',
             icon: CiShop,
-            active: !authStatus
+            active: true
+        },
+        {
+            name: 'About Us',
+            slug: '/about',
+            icon: IoIosLink,
+            active: true
         }
     ]
 
@@ -120,7 +120,7 @@ const SideBar = () => {
                                 key={nav.name}
                                 to={nav.slug}
                                 onClick={closeSidebar}
-                                className={({isActive}) => `${isActive ? 'bg-gray-100' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-gray-100 px-2 flex gap-1.5`}>
+                                className={({ isActive }) => `${isActive ? 'bg-gray-100' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-gray-100 px-2 flex gap-1.5`}>
                                 {nav.icon && <nav.icon className='text-xl' />}
                                 {nav.name}
                             </NavLink>

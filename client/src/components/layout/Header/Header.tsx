@@ -8,7 +8,6 @@ import { logout } from '../../../store/authSlice.js'
 import type { AppDispatch, RootState } from '../../../store/store.js'
 import Button from '../../ui/Button.js'
 import { IoLogOutOutline } from 'react-icons/io5'
-import Container from '../../container/Container.js'
 
 interface NavItem {
     name: string
@@ -50,14 +49,14 @@ const Header = () => {
             active: authStatus
         },
         {
-            name: 'About',
-            slug: '/about',
+            name: 'Shops',
+            slug: '/shops',
             active: true
         },
         {
-            name: 'Shops',
-            slug: '/shops',
-            active: !authStatus
+            name: 'About Us',
+            slug: '/about',
+            active: true
         }
     ]
 

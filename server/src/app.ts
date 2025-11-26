@@ -21,7 +21,7 @@ app.use(
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        "https://nearbuy-frontend.vercel.app"
+        "https://nearbuyshop.vercel.app"
     ],
     credentials: true
 }))
