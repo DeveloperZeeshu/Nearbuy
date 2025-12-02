@@ -1,3 +1,4 @@
+import { X } from "lucide-react"
 import React, { useId } from "react"
 import type { FieldError } from "react-hook-form"
 
@@ -26,7 +27,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({
 
             <select
                 id={id}
-                className={`border border-gray-300 rounded-lg focus:outline-none px-3 py-2.5 cursor-pointer overflow-x-hidden ${className}`}
+                className={`border-2 focus:border-indigo-600 border-gray-300 rounded-lg px-3 py-2.5 cursor-pointer overflow-x-hidden ${className}`}
                 {...props}
                 ref={ref}>
                 {
@@ -39,7 +40,12 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({
                     ))
                 }
             </select>
-            {errors && <p className="text-red-500 text-sm">{errors.message}</p>}
+
+            {errors && (
+                <div className="mt-1 flex items-center gap-1 rounded-sm border border-red-300/40 bg-red-100/40 px-2 py-1 text-sm text-red-700 backdrop-blur-sm shadow-sm">
+                    <X size={17} color="#fd0808" /> <span>{errors.message}</span>
+                </div>
+            )}
         </div>
     )
 })

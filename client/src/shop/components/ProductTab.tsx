@@ -2,10 +2,11 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProductStatus } from '../../store/productsSlice.js'
-import { useContext } from "react"
-import {AppContext} from '../../context/AppContext.js'
+import { useAppContext } from '../../context/AppContext.js'
 import type { RootState } from "../../store/store.js"
 import type { Product } from "../../types/product.types.js"
+import { motion } from "motion/react"
+import { fromTopVariants } from "../../animations/fromTopVariants.js"
 
 interface ProductProps {
     product: Product
@@ -14,11 +15,8 @@ interface ProductProps {
 export const ProductTab = ({ product }: ProductProps) => {
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
-    const context = useContext(AppContext)
-    if(!context)
-        throw new Error('Context Error.')
 
-    const {openEditProductForm} = context
+    const { openEditProductForm } = useAppContext()
 
     const handleDeactivateProduct = async (item: Product) => {
         if (!accessToken) return
@@ -69,27 +67,35 @@ export const ProductTab = ({ product }: ProductProps) => {
 
     return (
         <>
-            <div className="border flex flex-col lg:flex-row justify-between items-center gap-6 border-gray-300 p-4 rounded-lg bg-white">
-                <div className="flex items-center justify-center gap-6">
-                    <img src={product?.imageUrl || `https://placehold.co/400x400?text=${product?.name}`} alt={product?.name} className="h-13 w-13 rounded" loading="lazy" />
+            <motion.div
+                variants={fromTopVariants}
+                className="flex flex-col lg:flex-row justify-between items-center gap-3 p-4 rounded-lg bg-white shadow-md hover:shadow-lg">
+                <div className="flex items-center gap-4 w-full">
+                    <img
+                        src={product?.imageUrl || `https://placehold.co/400x400?text=${product?.name}`}
+                        alt={product?.name}
+                        className="h-14 w-14 rounded" loading="lazy" />
                     <div>
                         <p className="font-semibold">{product.name}</p>
                         <p className="text-gray-500 text-sm">{product.description}</p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-6 lg:gap-4 lg:flex-row">
-                    <div className="text-gray-700 text-end justify-center items-center flex gap-6 lg:gap-4 space-y-1">
+                <div className="flex flex-col gap-3 lg:gap-4 lg:flex-row">
+                    <div className="text-black text-end justify-center items-center flex gap-6 lg:gap-4 space-y-1">
                         <span>₹{product?.price}</span>
-                        <span className={`px-2 text-sm py-1 ${product?.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded-full`}>{product?.isAvailable ? 'In stock' : 'Out of stock'}</span>
+
+                        <p
+                            className={`border w-15 h-6 flex justify-center items-center text-sm ${product?.isAvailable ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'} rounded-md`}>
+                            {product?.isAvailable ? 'In stock' : 'Out of stock'}</p>
                     </div>
 
-                    <div className="flex items-center justify-center gap-6">
+                    <div className="flex items-center justify-center gap-6 w-full">
                         <button className="text-purple-600 hover:text-purple-800" onClick={() => openEditProductForm(product)}>Edit</button>
                         <button onClick={() => reactivateProd(product)} className="text-gray-500 hover:text-gray-700">Restock</button>
                         <button className="text-red-600 hover:text-red-800" onClick={() => handleDeactivateProduct(product)} >Deactivate</button>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </>
     )
 }

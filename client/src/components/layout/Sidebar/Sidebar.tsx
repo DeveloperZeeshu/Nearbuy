@@ -1,19 +1,14 @@
 
 import Button from '../../ui/Button.js'
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { IoCloseOutline, IoLogOutOutline } from 'react-icons/io5'
-import { useContext, type ElementType } from 'react';
-import { AppContext } from '../../../context/AppContext.js'
+import { type ElementType } from 'react';
+import { useAppContext } from '../../../context/AppContext.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../../../services/auth.sevice.js';
 import toast from 'react-hot-toast';
 import { logout } from '../../../store/authSlice.js'
 import type { RootState } from '../../../store/store.js';
-import { GoHome } from 'react-icons/go';
-import { IoIosLink } from 'react-icons/io';
-import { CiShop } from 'react-icons/ci';
-import { LuLayoutDashboard, LuUserRoundPen } from 'react-icons/lu';
-import { HiOutlineTag } from 'react-icons/hi';
+import { House, LayoutDashboard, Link as LinkIcon, LogOut, Store, Tag, UserRoundPen, X } from 'lucide-react';
 
 interface NavItem {
     name: string
@@ -24,11 +19,8 @@ interface NavItem {
 
 const SideBar = () => {
     const navigate = useNavigate()
-    const context = useContext(AppContext)
-    if (!context)
-        throw new Error('Context Error.')
 
-    const { closeSidebar } = context
+    const { closeSidebar } = useAppContext()
     const authStatus = useSelector((state: RootState) => state.auth.status)
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -37,37 +29,37 @@ const SideBar = () => {
         {
             name: 'Home',
             slug: '/',
-            icon: GoHome,
+            icon: House,
             active: true
         },
         {
             name: 'DashBoard',
             slug: '/shop/dashboard',
-            icon: LuLayoutDashboard,
+            icon: LayoutDashboard,
             active: authStatus
         },
         {
             name: 'Manage Products',
             slug: '/shop/products',
-            icon: HiOutlineTag,
+            icon: Tag,
             active: authStatus
         },
         {
             name: 'Profile',
             slug: '/shop/edit-profile',
-            icon: LuUserRoundPen,
+            icon: UserRoundPen,
             active: authStatus
         },
         {
             name: 'Shops',
             slug: '/shops',
-            icon: CiShop,
+            icon: Store,
             active: true
         },
         {
             name: 'About Us',
             slug: '/about',
-            icon: IoIosLink,
+            icon: LinkIcon,
             active: true
         }
     ]
@@ -93,8 +85,7 @@ const SideBar = () => {
         <>
             <aside className='shadow-2xl p-4 flex flex-col justify-start bg-white h-full w-full rounded-r-lg gap-9'>
 
-                <p className="flex justify-end w-full"><IoCloseOutline className="text-2xl cursor-pointer" onClick={closeSidebar} /></p>
-
+                <p className="flex justify-end w-full"><X className="text-2xl cursor-pointer" onClick={closeSidebar} /></p>
                 {
                     !authStatus &&
                     <div className={`flex justify-center items-center gap-5`}>
@@ -120,8 +111,8 @@ const SideBar = () => {
                                 key={nav.name}
                                 to={nav.slug}
                                 onClick={closeSidebar}
-                                className={({ isActive }) => `${isActive ? 'bg-gray-100' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-gray-100 px-2 flex gap-1.5`}>
-                                {nav.icon && <nav.icon className='text-xl' />}
+                                className={({ isActive }) => `${isActive ? 'bg-indigo-50' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-indigo-50 px-2 flex gap-1.5 items-center`}>
+                                {nav.icon && <nav.icon className='' size={19} />}
                                 {nav.name}
                             </NavLink>
                         ))
@@ -129,11 +120,11 @@ const SideBar = () => {
                 </nav>
                 {
                     authStatus &&
-                    <div className='w-full hover:bg-gray-100 rounded-lg py-2'>
+                    <div className='w-full hover:bg-indigo-50 rounded-lg py-2'>
                         <button
                             className='flex px-2 justify-center items-center cursor-pointer gap-1'
                             onClick={handleLogout}>
-                            <IoLogOutOutline className='text-xl' />
+                            <LogOut size={19} />
                             Logout
                         </button>
                     </div>

@@ -23,7 +23,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({
             </label>
 
             <textarea
-                className={`bg-[#282828] text-[1.6rem] w-full rounded-xl px-1 py-1 h-auto resize-none focus:outline-none mt-3 pb-2 ${className}`}
+                className={`bg-[#282828] text-[1.6rem] w-full rounded-xl px-1 py-1 h-auto resize-none  mt-3 pb-2 ${className}`}
                 placeholder={placeholder}
                 id={id}
                 ref={ref}

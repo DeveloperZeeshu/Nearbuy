@@ -1,24 +1,29 @@
 import { Outlet } from "react-router-dom"
 import { ProtectedRoute } from '../components/ProtectedRoute.js'
-import { useContext } from "react"
-import { AppContext } from '../context/AppContext.js'
+import { useAppContext } from '../context/AppContext.js'
 import { ProductForm } from './components/productForm/ProductForm.js'
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts } from '../store/productsSlice.ts'
 import type { AppDispatch, RootState } from "../store/store.js"
+import { useEffect } from "react"
 
 const ShopLayout = () => {
-    const context = useContext(AppContext)
-    if (!context)
-        throw new Error('Context Error.')
-
-    const { isProductFormOpen, editingProduct, closeProductForm } = context
+    const { isProductFormOpen, editingProduct, closeProductForm } = useAppContext()
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        if (isProductFormOpen) {
+            document.body.classList.add('overflow-hidden')
+        } else {
+            document.body.classList.remove('overflow-hidden')
+        }
+
+        return () => document.body.classList.remove('overflow-hidden')
+    }, [isProductFormOpen])
     return (
         <main className="flex justify-center items-center">
             <ProtectedRoute>
-
                 {
                     isProductFormOpen && (
                         <div
@@ -38,7 +43,7 @@ const ShopLayout = () => {
                     />
                 )}
                 <main className={isProductFormOpen ? 'pointer-events-none' : ''}>
-                <Outlet />
+                    <Outlet />
                 </main>
             </ProtectedRoute>
         </main>

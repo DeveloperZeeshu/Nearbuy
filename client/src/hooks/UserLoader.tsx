@@ -1,17 +1,14 @@
 
-import { useCallback, useContext, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { login, logout } from "../store/authSlice.js"
 import axios from "axios"
 import type { RootState } from "../store/store.js"
-import { AppContext } from "../context/AppContext.js"
+import { useAppContext } from "../context/AppContext.js"
 
 export const useUserLoader = () => {
-    const context = useContext(AppContext)
-    if (!context)
-        throw new Error('Context Error.')
 
-    const { setLoading } = context
+    const { setLoading } = useAppContext()
 
     const dispatch = useDispatch()
     const status = useSelector((state: RootState) => state.auth.status)

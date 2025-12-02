@@ -1,3 +1,4 @@
+import { X } from "lucide-react"
 import React, { useId } from "react"
 import type { FieldError } from "react-hook-form"
 
@@ -33,13 +34,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
             <input
                 type={type}
                 id={id}
-                className={`border border-gray-300 rounded-lg py-2.5 px-4 w-full focus:outline-none ${className}`}
+                className={`border-2 border-gray-300 focus:border-indigo-600  rounded-lg focus:outline-none py-2.5 px-4 w-full ${className}`}
                 placeholder={placeholder}
                 ref={ref}
                 {...props}
             />
 
-            {errors && <p className="text-red-500 text-sm">{errors.message}</p>}
+            {errors && (
+                <div className="mt-1 flex items-center gap-1 rounded-sm border border-red-300/40 bg-red-100/40 px-2 py-1 text-sm text-red-700 backdrop-blur-sm shadow-sm">
+                  <X size={17} color="#fd0808" /> <span>{errors.message}</span>
+                </div>
+            )}
+
         </div>
     )
 })

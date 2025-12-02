@@ -1,10 +1,9 @@
 
-import { IoCloseOutline } from "react-icons/io5";
 import Input from '../../../components/ui/Input'
 import Select from '../../../components/ui/Select'
 import Button from '../../../components/ui/Button'
-import { useContext, useEffect } from "react";
-import { AppContext } from "../../../context/AppContext";
+import { useEffect } from "react";
+import { useAppContext } from "../../../context/AppContext";
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
@@ -13,6 +12,7 @@ import type { AppDispatch, RootState } from "../../../store/store";
 import type { ProductTabDetails } from "../../../types/product.types";
 import { fetchProducts } from "../../../store/productsSlice";
 import { handleAxiosError } from "../../../utils/handleAxiosError";
+import { X } from 'lucide-react';
 
 interface FormData {
   productName: string
@@ -28,13 +28,10 @@ interface ProductFormProps {
 }
 
 export const ProductForm = ({ product, mode }: ProductFormProps) => {
-  const context = useContext(AppContext)
-  if (!context)
-    throw new Error('Context Error.')
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const { closeProductForm } = context
+  const { closeProductForm } = useAppContext()
   const accessToken = useSelector((state: RootState) => state.auth.accessToken)
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>()
 
@@ -102,10 +99,9 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
         price: Number(data.price),
       };
 
-      let res;
+      let res
 
       if (product) {
-
         res = await axios.put(
           `${import.meta.env.VITE_API_URL}/api/product/${product._id}`,
           payload,
@@ -147,7 +143,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
   return (
     <>
       <div className="z-20 w-auto fixed flex flex-col items-center justify-center bg-[white] top-40 rounded-lg p-4 shadow-xl">
-        <p className="flex justify-end w-full"><IoCloseOutline className="text-2xl cursor-pointer mb-1" onClick={closeProductForm} /></p>
+        <p className="flex justify-end w-full"><X className="text-2xl cursor-pointer mb-1" onClick={closeProductForm} /></p>
         <form
           onSubmit={handleSubmit(submit)}
           className="min-w-[20rem] w-auto lg:w-110 gap-4 flex flex-col"

@@ -8,6 +8,9 @@ import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
 import { login } from '../../store/authSlice.js'
 import { handleAxiosError } from '../../utils/handleAxiosError.js'
+import { motion } from 'motion/react'
+import { fromLeftVariants } from '../../animations/fromLeftVariants.js'
+import { ArrowLeft } from 'lucide-react'
 
 interface FormData {
     email: string
@@ -34,15 +37,27 @@ const SignIn = () => {
     }
 
     return (
-        <>
-            <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
+        <div className='w-full flex flex-col items-center'>
+            <div className='w-full max-w-118 lg:w-118'>
+                <button
+                    onClick={() => navigate('/')}
+                    className='text-sm mb-2 text-indigo-600 font-semibold hover:text-indigo-500 flex gap-.5 items-center cursor-pointer'
+                ><ArrowLeft size={18} />
+                    Back to Home
+                </button>
+            </div>
+            <motion.div
+                variants={fromLeftVariants}
+                initial='hidden'
+                animate='show'
+                className="shadow-lg flex flex-col items-center justify-center bg-white rounded-xl p-5 hover:shadow-xl w-full max-w-118 lg:w-118">
 
                 <div className="pb-13">
                     <h2 className="text-2xl font-bold text-center">Login</h2>
                     <p className="text-base text-gray-500">Sign in to your account</p>
                 </div>
 
-                <form className="w-full flex flex-col lg:w-108 space-y-6" onSubmit={handleSubmit(submit)}>
+                <form className="w-full flex flex-col space-y-6" onSubmit={handleSubmit(submit)}>
                     <div className='flex flex-col space-y-6'>
                         <Input
                             label='Email'
@@ -74,7 +89,7 @@ const SignIn = () => {
                                 }
                             })}
                         />
-                        <p className="cursor-pointer -mt-6 text-blue-600 text-right text-sm">Forgot Password?</p>
+                        <p className="cursor-pointer -mt-6 text-indigo-600 text-right text-sm">Forgot Password?</p>
                     </div>
 
                     <Button
@@ -82,9 +97,9 @@ const SignIn = () => {
                     />
                 </form>
 
-                <p className='mt-5 text-sm'>Don't have an account? <Link to='/register' className=" text-blue-600 cursor-pointer">Register now</Link></p>
-            </div>
-        </>
+                <p className='mt-4 text-sm'>Don't have an account? <Link to='/register' className=" text-indigo-600 cursor-pointer font-semibold">Register now</Link></p>
+            </motion.div>
+        </div>
     )
 }
 

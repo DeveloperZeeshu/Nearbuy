@@ -11,6 +11,9 @@ import { useSelector } from 'react-redux'
 import type { RootState } from '../../store/store.js'
 import { handleAxiosError } from '../../utils/handleAxiosError.js'
 import type { ShopInfo } from '../../types/shop.types.js'
+import { motion } from 'motion/react'
+import { fromLeftVariants } from '../../animations/fromLeftVariants.js'
+import { ArrowLeft } from 'lucide-react'
 
 interface FormData {
     shopName: string
@@ -86,174 +89,186 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
     }
 
     return (
-        <div className="shadow-xl flex flex-col items-center justify-center bg-white rounded-lg p-5">
+        <div className=''>
+            <button
+                onClick={() => navigate('/')}
+                className='text-sm mb-2 text-indigo-600 font-semibold hover:text-indigo-500 flex gap-.5 items-center cursor-pointer'
+            ><ArrowLeft size={18} />
+                Back to Home
+            </button>
+            <motion.div
+                variants={fromLeftVariants}
+                initial='hidden'
+                animate='show'
+                className="shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-5">
 
-            <div className="pb-15">
-                <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
-                <p className="text-base text-gray-500">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
-            </div>
-
-            <form className="w-full flex flex-col space-y-5 max-w-4xl" onSubmit={handleSubmit(submit)}>
-                {/* <div className="w-full"> */}
-                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
-                    <div className="w-full">
-                        <Input
-                            label='Shop Name'
-                            type="text"
-                            placeholder="Enter your shop name"
-                            errors={errors.shopName}
-                            {...register('shopName', {
-                                required: 'Shop name is required'
-                            })}
-                        />
-                    </div>
-
-                    <div className="w-full mt-5 lg:mt-0">
-                        <Input
-                            label='Owner Name'
-                            type="text"
-                            placeholder="Enter the owner name"
-                            errors={errors.ownerName}
-                            {...register('ownerName', {
-                                required: 'Owner name is required'
-                            })}
-                        />
-                    </div>
+                <div className="pb-15">
+                    <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
+                    <p className="text-base text-gray-500">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
                 </div>
 
-                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
-                    <div className="w-full">
-                        <Input
-                            label='Email'
-                            placeholder="Enter your email e.g., xyz@gmail.com"
-                            type="email"
-                            disabled={!!shopInfo}
-                            errors={errors.email}
-                            {...register('email', {
-                                required: 'Email is required',
-                                pattern: {
-                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: 'Invalid email address'
-                                }
-                            })}
-                        />
-                    </div>
-                    <div className="w-full mt-5 lg:mt-0">
-                        <Input
-                            label='Phone'
-                            placeholder="Enter your phone"
-                            type="text"
-                            errors={errors.phone}
-                            {...register('phone', {
-                                required: 'Phone number is required',
-                                pattern: {
-                                    value: /^[0-9]{10}$/,
-                                    message: 'Phone number must be exactly 10 digits'
-                                }
-                            })}
-                        />
-                    </div>
-                </div>
-
-                <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
-                    <div className="w-full">
-                        <Input
-                            type="text"
-                            label='Address'
-                            placeholder="Shop no., street"
-                            errors={errors.address}
-                            {...register('address', {
-                                required: 'Address is required'
-                            })}
-                        />
-                    </div>
-
-                    <div className="w-full flex mt-5 lg:mt-0 space-x-4">
-                        <div>
-                            <Select
-                                label='City'
-                                options={['Jaipur']}
-                                errors={errors.city}
-                                {...register('city', {
-                                    required: 'City is required'
-                                })}
-                            />
-                        </div>
-                        <div>
-                            <Select
-                                label='State'
-                                options={['Rajasthan']}
-                                errors={errors.state}
-                                {...register('state', {
-                                    required: 'State is required'
-                                })}
-                            />
-                        </div>
-                        <div>
+                <form className="w-full flex flex-col space-y-5 max-w-4xl" onSubmit={handleSubmit(submit)}>
+                    {/* <div className="w-full"> */}
+                    <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                        <div className="w-full">
                             <Input
-                                type='text'
-                                label='Zip code'
-                                placeholder="e.g., 302001"
-                                errors={errors.zipcode}
-                                {...register('zipcode', {
-                                    required: 'Zipcode is required',
+                                label='Shop Name'
+                                type="text"
+                                placeholder="Enter your shop name"
+                                errors={errors.shopName}
+                                {...register('shopName', {
+                                    required: 'Shop name is required'
+                                })}
+                            />
+                        </div>
+
+                        <div className="w-full mt-5 lg:mt-0">
+                            <Input
+                                label='Owner Name'
+                                type="text"
+                                placeholder="Enter the owner name"
+                                errors={errors.ownerName}
+                                {...register('ownerName', {
+                                    required: 'Owner name is required'
+                                })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                        <div className="w-full">
+                            <Input
+                                label='Email'
+                                placeholder="Enter your email e.g., xyz@gmail.com"
+                                type="email"
+                                disabled={!!shopInfo}
+                                errors={errors.email}
+                                {...register('email', {
+                                    required: 'Email is required',
                                     pattern: {
-                                        value: /^[1-9][0-9]{5}$/,
-                                        message: 'Zipcode must be a valid 6-digit number'
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: 'Invalid email address'
+                                    }
+                                })}
+                            />
+                        </div>
+                        <div className="w-full mt-5 lg:mt-0">
+                            <Input
+                                label='Phone'
+                                placeholder="Enter your phone"
+                                type="text"
+                                errors={errors.phone}
+                                {...register('phone', {
+                                    required: 'Phone number is required',
+                                    pattern: {
+                                        value: /^[0-9]{10}$/,
+                                        message: 'Phone number must be exactly 10 digits'
                                     }
                                 })}
                             />
                         </div>
                     </div>
-                </div>
 
-                <div className="flex w-full flex-col gap-0 lg:gap-5 lg:flex-row justify-center">
-                    <div className="w-full">
-                        <Input
-                            label='Enter Password'
-                            type="password"
-                            placeholder="Enter your password"
-                            errors={errors.password}
-                            {...register('password', {
-                                required: 'Enter a password',
-                                minLength: {
-                                    value: 8,
-                                    message: 'Password must be atleast 8 characters long'
-                                },
-                                pattern: {
-                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
-                                    message: 'Password must contain uppercase, lowercase, number, and special character'
-                                }
-                            })}
-                        />
-                    </div>
-
-                    {
-                        !shopInfo &&
-                        <div className="w-full mt-5 lg:mt-0">
+                    <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
+                        <div className="w-full">
                             <Input
-                                label='Confirm Password'
-                                type="password"
-                                placeholder="Confirm your password"
-                                errors={errors.confirmPassword}
-                                {...register('confirmPassword', {
-                                    required: 'Confirm your password',
-                                    validate: (value) =>
-                                        value === watch('password') || "Password didn't match"
+                                type="text"
+                                label='Address'
+                                placeholder="Shop no., street"
+                                errors={errors.address}
+                                {...register('address', {
+                                    required: 'Address is required'
                                 })}
                             />
-                        </div>}
-                </div>
-                {/* </div> */}
+                        </div>
 
-                <Button
-                    type="submit"
-                />
-            </form>
+                        <div className="w-full flex mt-5 lg:mt-0 space-x-4">
+                            <div>
+                                <Select
+                                    label='City'
+                                    options={['Jaipur']}
+                                    errors={errors.city}
+                                    {...register('city', {
+                                        required: 'City is required'
+                                    })}
+                                />
+                            </div>
+                            <div>
+                                <Select
+                                    label='State'
+                                    options={['Rajasthan']}
+                                    errors={errors.state}
+                                    {...register('state', {
+                                        required: 'State is required'
+                                    })}
+                                />
+                            </div>
+                            <div>
+                                <Input
+                                    type='text'
+                                    label='Zip code'
+                                    placeholder="e.g., 302001"
+                                    errors={errors.zipcode}
+                                    {...register('zipcode', {
+                                        required: 'Zipcode is required',
+                                        pattern: {
+                                            value: /^[1-9][0-9]{5}$/,
+                                            message: 'Zipcode must be a valid 6-digit number'
+                                        }
+                                    })}
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-            {
-                !shopInfo &&
-                <p className='mt-4 text-sm'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer">Login</Link></p>}
+                    <div className="flex w-full flex-col gap-0 lg:gap-5 lg:flex-row justify-center">
+                        <div className="w-full mb-2">
+                            <Input
+                                label='Enter Password'
+                                type="password"
+                                placeholder="Enter your password"
+                                errors={errors.password}
+                                {...register('password', {
+                                    required: 'Enter a password',
+                                    minLength: {
+                                        value: 8,
+                                        message: 'Password must be atleast 8 characters long'
+                                    },
+                                    pattern: {
+                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+                                        message: 'Password must contain uppercase, lowercase, number, and special character'
+                                    }
+                                })}
+                            />
+                        </div>
+
+                        {
+                            !shopInfo &&
+                            <div className="w-full mt-5 lg:mt-0">
+                                <Input
+                                    label='Confirm Password'
+                                    type="password"
+                                    placeholder="Confirm your password"
+                                    errors={errors.confirmPassword}
+                                    {...register('confirmPassword', {
+                                        required: 'Confirm your password',
+                                        validate: (value) =>
+                                            value === watch('password') || "Password didn't match"
+                                    })}
+                                />
+                            </div>}
+                    </div>
+                    {/* </div> */}
+
+                    <Button
+                        type="submit"
+                    />
+                </form>
+
+                {
+                    !shopInfo &&
+                    <p className='mt-4 text-sm'>Already registered? <Link to='/login' className="text-indigo-600 cursor-pointer font-semibold">Login</Link></p>}
+            </motion.div>
         </div>
     )
 }

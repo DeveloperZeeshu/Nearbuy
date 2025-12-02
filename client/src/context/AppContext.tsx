@@ -1,4 +1,4 @@
-import React, { createContext, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useState, type ReactNode } from "react";
 import type { ProductTabDetails } from "../types/product.types";
 
 interface AppProviderProps {
@@ -66,4 +66,10 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
 export default AppProvider
 
+export const useAppContext = () => {
+    const context = useContext(AppContext)
+    if(!context)
+        throw new Error('App Context Error.')
 
+    return context
+}

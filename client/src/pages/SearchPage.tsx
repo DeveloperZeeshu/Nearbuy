@@ -4,6 +4,7 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import Container from '../components/container/Container'
 import { useSearchParams } from 'react-router-dom'
+import Loader from '../components/ui/Loader'
 
 interface ShopInfo {
     shopName: string
@@ -66,9 +67,7 @@ const SearchPage = () => {
 
     if (loading)
         return (
-            <Container>
-                <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-            </Container>
+            <Loader />
         )
 
     if (products.length < 1)

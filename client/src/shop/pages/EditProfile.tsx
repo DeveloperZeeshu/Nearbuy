@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import toast from "react-hot-toast"
 import axios from "axios"
 import type { RootState } from "../../store/store"
+import Loader from "../../components/ui/Loader"
 
 const EditProfile = () => {
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
@@ -33,9 +34,7 @@ const EditProfile = () => {
     }, [accessToken, fetchShopDetails])
 
     if (loading) return (
-        <Container>
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-        </Container>
+        <Loader />
     )
     if (error) return <div className="text-center">{error}</div>
 

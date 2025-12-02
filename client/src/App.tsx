@@ -2,17 +2,27 @@ import './index.css'
 import { Outlet } from 'react-router-dom'
 import Header from './components/layout/Header/Header'
 import Sidebar from './components/layout/Sidebar/Sidebar'
-import { useContext } from 'react'
-import { AppContext } from './context/AppContext'
+import { useAppContext } from './context/AppContext'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/layout/Footer/Footer'
+import { useEffect } from 'react'
+import { useUserLoader } from './hooks/UserLoader'
 
 const App = () => {
-  const context = useContext(AppContext)
-  if (!context)
-    throw new Error('Context Error.')
 
-  const { isSidebarOpen, closeSidebar } = context
+  const { isSidebarOpen, closeSidebar } = useAppContext()
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+    }
+
+    return () => document.body.classList.remove('overflow-hidden')
+  }, [isSidebarOpen])
+
+  useUserLoader()
 
   return (
     <div className='min-h-screen flex flex-col'>

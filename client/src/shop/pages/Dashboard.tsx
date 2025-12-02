@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import type { RootState } from '../../store/store'
 import type { ShopInfo } from '../../types/shop.types'
+import Loader from '../../components/ui/Loader'
 
 const DashboardPage = () => {
     const accessToken = useSelector((state: RootState) => state.auth.accessToken)
@@ -36,16 +37,14 @@ const DashboardPage = () => {
     }, [accessToken, fetchShopData])
 
     if (loading) return (
-        <Container>
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-        </Container>
+        <Loader />
     )
     if (error) return <div className="text-red-500 text-center">{error}</div>;
 
     return (
         <>
             <Container>
-                <div className="w-full rounded-lg flex flex-col gap-4 shadow-xl p-4">
+                <div className="w-full rounded-xl flex flex-col gap-4 shadow-xl p-4 bg-white">
                     <StatCard ownerName={shop?.ownerName} />
 
                     <div className="flex flex-col lg:flex-row gap-4">
@@ -58,10 +57,10 @@ const DashboardPage = () => {
                         <div className="flex flex-col gap-4">
                             <Products />
                             <div className="grid md:grid-cols-2 gap-4">
-                                <div className="bg-white border border-gray-300 rounded-lg p-4">
+                                <div className="bg-white shadow-md rounded-lg p-4">
                                     <h3 className="font-bold mb-9">Recent Orders</h3>
                                 </div>
-                                <div className="bg-white border border-gray-300 rounded-lg p-4">
+                                <div className="bg-white rounded-lg p-4 shadow-md">
                                     <h3 className="font-bold mb-9">Quick Actions</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         <button className="bg-gray-100 py-2.5 font-semibold hover:bg-gray-200 text-sm px-3 rounded-lg text-center">
