@@ -5,7 +5,7 @@ export interface ProductTabDetails {
     name: string
     category: string
     description: string
-    price: number
+    price: string
     imageUrl: string
     isAvailable: boolean
 }
@@ -16,7 +16,7 @@ export interface Product {
     name: string
     category: string
     description: string
-    price: number
+    price: string
     imageUrl: string
     isAvailable: boolean
 }

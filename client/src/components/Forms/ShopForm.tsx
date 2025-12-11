@@ -1,41 +1,43 @@
-import Button from '../ui/Button.js'
+import Button from '../ui/button/Button.js'
 import Input from '../ui/Input.js'
 import Select from '../ui/Select.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import axios from 'axios'
 import toast from 'react-hot-toast'
 import { getCurrentLocation } from '../../utils/getCurrentLocation.js'
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../../store/store.js'
-import { handleAxiosError } from '../../utils/handleAxiosError.js'
+import { useEffect, useState } from 'react'
+import { handleAxiosError } from '../../api/utils/handleAxiosError.js'
 import type { ShopInfo } from '../../types/shop.types.js'
 import { motion } from 'motion/react'
 import { fromLeftVariants } from '../../animations/fromLeftVariants.js'
 import { ArrowLeft } from 'lucide-react'
-
-interface FormData {
-    shopName: string
-    ownerName: string
-    email: string
-    phone: number
-    address: string
-    city: string
-    state: string
-    zipcode: number
-    password: string
-    confirmPassword: string
-}
+import LoadingButton from '../ui/button/LoadingButton.js'
+import apiClient from '../../api/apiClient.js'
+import { registerValidationSchema, updateProfileSchema, type RegisterFormData, type UpdateProfileFormData } from '../../validator/auth_validator.js'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useDispatch } from 'react-redux'
+import { updateProfile } from '../../store/authSlice.js'
 
 interface ShopInfoProps {
     shopInfo?: ShopInfo | null
 }
 
 const ShopForm = ({ shopInfo }: ShopInfoProps) => {
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<FormData>()
+    const isUpdate = !!shopInfo
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm<RegisterFormData | UpdateProfileFormData>({
+        resolver: zodResolver(
+            isUpdate ? updateProfileSchema : registerValidationSchema
+        )
+    })
+    const [loading, setLoading] = useState<boolean>(false)
     const navigate = useNavigate()
-    const accessToken = useSelector((state: RootState) => state.auth.accessToken)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (shopInfo) {
@@ -52,7 +54,8 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
         }
     }, [shopInfo, reset])
 
-    const submit: SubmitHandler<FormData> = async (data) => {
+    const submit: SubmitHandler<RegisterFormData | UpdateProfileFormData> = async (data) => {
+        setLoading(true)
         const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
         if (!userRes) return
 
@@ -66,18 +69,13 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
         try {
             let res
             if (shopInfo) {
-                if (!accessToken) {
-                    toast.error('Something went wrong.')
-                }
-                res = await axios.put(`${import.meta.env.VITE_API_URL}/api/shop/updateShop`, finalData, {
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                    withCredentials: true
-                })
+                res = await apiClient.put(`/shop/updateShop`, finalData)
                 if (res?.data?.success) {
                     toast.success('Profile updated successfully.')
+                    dispatch(updateProfile(res.data.updatedShop))
                 }
             } else {
-                res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, finalData, { withCredentials: true })
+                res = await apiClient.post(`/register`, finalData)
                 if (res?.data?.success) {
                     toast.success('Registration successful.')
                     navigate('/login')
@@ -85,29 +83,39 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
             }
         } catch (err: unknown) {
             handleAxiosError(err)
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
-        <div className=''>
-            <button
-                onClick={() => navigate('/')}
-                className='text-sm mb-2 text-indigo-600 font-semibold hover:text-indigo-500 flex gap-.5 items-center cursor-pointer'
-            ><ArrowLeft size={18} />
-                Back to Home
-            </button>
+        <div className='w-full flex flex-col items-center'>
+            <div className='w-full md:w-xl lg:w-4xl'>
+                <button
+                    onClick={() => navigate(shopInfo ? '/shop/dashboard' : '/')}
+                    className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
+                ><ArrowLeft size={18} />
+                    Back to Home
+                </button>
+            </div>
             <motion.div
                 variants={fromLeftVariants}
                 initial='hidden'
                 animate='show'
-                className="shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-5">
+                className="shadow-md w-full flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 max-w-xl lg:max-w-4xl">
 
                 <div className="pb-15">
-                    <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Profile' : 'Register Shop'}</h2>
-                    <p className="text-base text-gray-500">{shopInfo ? 'Edit your profile information here' : 'Create your account to get started'}</p>
+                    <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Shop Profile' : 'Register Your Shop'}</h2>
+                    <p className="text-sm text-gray-500 mt-1 text-center">
+                        {shopInfo
+                            ? 'Update your business details below'
+                            : 'List your shop on NearBuy and start reaching nearby customers'}
+                    </p>
                 </div>
 
-                <form className="w-full flex flex-col space-y-5 max-w-4xl" onSubmit={handleSubmit(submit)}>
+                <form
+                    className="w-full flex flex-col space-y-5"
+                    onSubmit={handleSubmit(submit)}>
                     {/* <div className="w-full"> */}
                     <div className="w-full gap-0 lg:gap-5 flex flex-col lg:flex-row justify-center items-center">
                         <div className="w-full">
@@ -116,9 +124,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 type="text"
                                 placeholder="Enter your shop name"
                                 errors={errors.shopName}
-                                {...register('shopName', {
-                                    required: 'Shop name is required'
-                                })}
+                                {...register('shopName')}
                             />
                         </div>
 
@@ -128,9 +134,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 type="text"
                                 placeholder="Enter the owner name"
                                 errors={errors.ownerName}
-                                {...register('ownerName', {
-                                    required: 'Owner name is required'
-                                })}
+                                {...register('ownerName')}
                             />
                         </div>
                     </div>
@@ -143,13 +147,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 type="email"
                                 disabled={!!shopInfo}
                                 errors={errors.email}
-                                {...register('email', {
-                                    required: 'Email is required',
-                                    pattern: {
-                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                        message: 'Invalid email address'
-                                    }
-                                })}
+                                {...register('email')}
                             />
                         </div>
                         <div className="w-full mt-5 lg:mt-0">
@@ -158,13 +156,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 placeholder="Enter your phone"
                                 type="text"
                                 errors={errors.phone}
-                                {...register('phone', {
-                                    required: 'Phone number is required',
-                                    pattern: {
-                                        value: /^[0-9]{10}$/,
-                                        message: 'Phone number must be exactly 10 digits'
-                                    }
-                                })}
+                                {...register('phone')}
                             />
                         </div>
                     </div>
@@ -176,9 +168,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 label='Address'
                                 placeholder="Shop no., street"
                                 errors={errors.address}
-                                {...register('address', {
-                                    required: 'Address is required'
-                                })}
+                                {...register('address')}
                             />
                         </div>
 
@@ -188,9 +178,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                     label='City'
                                     options={['Jaipur']}
                                     errors={errors.city}
-                                    {...register('city', {
-                                        required: 'City is required'
-                                    })}
+                                    {...register('city')}
                                 />
                             </div>
                             <div>
@@ -198,24 +186,16 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                     label='State'
                                     options={['Rajasthan']}
                                     errors={errors.state}
-                                    {...register('state', {
-                                        required: 'State is required'
-                                    })}
+                                    {...register('state')}
                                 />
                             </div>
                             <div>
                                 <Input
                                     type='text'
-                                    label='Zip code'
+                                    label='ZipCode'
                                     placeholder="e.g., 302001"
                                     errors={errors.zipcode}
-                                    {...register('zipcode', {
-                                        required: 'Zipcode is required',
-                                        pattern: {
-                                            value: /^[1-9][0-9]{5}$/,
-                                            message: 'Zipcode must be a valid 6-digit number'
-                                        }
-                                    })}
+                                    {...register('zipcode')}
                                 />
                             </div>
                         </div>
@@ -228,46 +208,34 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                 type="password"
                                 placeholder="Enter your password"
                                 errors={errors.password}
-                                {...register('password', {
-                                    required: 'Enter a password',
-                                    minLength: {
-                                        value: 8,
-                                        message: 'Password must be atleast 8 characters long'
-                                    },
-                                    pattern: {
-                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
-                                        message: 'Password must contain uppercase, lowercase, number, and special character'
-                                    }
-                                })}
+                                {...register('password')}
                             />
                         </div>
 
                         {
-                            !shopInfo &&
+                            !isUpdate &&
                             <div className="w-full mt-5 lg:mt-0">
                                 <Input
                                     label='Confirm Password'
                                     type="password"
                                     placeholder="Confirm your password"
                                     errors={errors.confirmPassword}
-                                    {...register('confirmPassword', {
-                                        required: 'Confirm your password',
-                                        validate: (value) =>
-                                            value === watch('password') || "Password didn't match"
-                                    })}
+                                    {...register('confirmPassword')}
                                 />
                             </div>}
                     </div>
-                    {/* </div> */}
 
-                    <Button
-                        type="submit"
-                    />
+                    {
+                        loading ?
+                            <LoadingButton /> :
+                            <Button
+                                type="submit"
+                            />
+                    }
                 </form>
-
                 {
                     !shopInfo &&
-                    <p className='mt-4 text-sm'>Already registered? <Link to='/login' className="text-indigo-600 cursor-pointer font-semibold">Login</Link></p>}
+                    <p className='mt-4 text-sm text-center'>Already registered? <Link to='/login' className="text-blue-600 cursor-pointer font-semibold hover:text-blue-500">Login</Link></p>}
             </motion.div>
         </div>
     )

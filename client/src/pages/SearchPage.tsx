@@ -1,10 +1,13 @@
 import { ProductCard } from '../components/ui/ProductCard'
 import { useEffect, useState } from "react"
-import axios from "axios"
 import toast from "react-hot-toast"
 import Container from '../components/container/Container'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Loader from '../components/ui/Loader'
+import Button from '../components/ui/button/Button'
+import { motion } from 'motion/react'
+import { fromLeftVariants } from '../animations/fromLeftVariants'
+import apiClient from '../api/apiClient'
 
 interface ShopInfo {
     shopName: string
@@ -26,6 +29,7 @@ interface SearchedProductInfo {
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
     const [products, setProducts] = useState<SearchedProductInfo[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -44,7 +48,7 @@ const SearchPage = () => {
             }
 
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/product/search`, {
+                const res = await apiClient.get(`/product/search`, {
                     params: { query, category, radius, lat, lng },
                 });
 
@@ -67,11 +71,34 @@ const SearchPage = () => {
 
     if (loading)
         return (
-            <Loader />
+            <Container>
+                <Loader />
+            </Container>
         )
 
     if (products.length < 1)
-        return <Container>No Product found nearby.</Container>
+        return (
+            <Container>
+                <motion.div
+                    variants={fromLeftVariants}
+                    initial='hidden'
+                    animate='show'
+                    className='flex flex-col justify-center items-center bg-white px-3 pb-5 rounded-xl shadow-lg'>
+                    <img
+                        src='/noProductFound.svg'
+                        alt='no product found nearby'
+                        loading='lazy'
+                        className='h-80 w-80'
+                    />
+                    <p className='text-xl font-semibold mb-5 text-center'>No Product found nearby.</p>
+                    <Button
+                        type='button'
+                        text='Go Back'
+                        onClick={() => navigate('/')}
+                    />
+                </motion.div>
+            </Container>
+        )
 
     return (
         <>

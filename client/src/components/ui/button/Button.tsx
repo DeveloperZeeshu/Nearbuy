@@ -14,7 +14,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     ...props
 }, ref) => {
     return <button
-        className={`cursor-pointer text-white text-sm bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition py-3 font-medium px-4 rounded-lg ${className}`}
+        className={`cursor-pointer text-white text-sm bg-black hover:bg-gray-800 active:scale-95 transition py-3 font-semibold px-4 rounded-md ${className} flex justify-center items-center`}
         type={type}
         ref={ref}
         {...props}

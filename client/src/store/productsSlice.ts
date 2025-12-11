@@ -1,32 +1,17 @@
-
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-import type { Product } from '../types/product.types';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { Product } from "../types/product.types";
 
 interface ProductsState {
-  items: Product[]
-  loading: boolean
-  error: string | null
+  products: Product[]
 }
 
-export const fetchProducts = createAsyncThunk<Product[], string | null>(
-  'products/fetchProducts',
-  async (accessToken, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/product/products`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      return res.data.products as Product[];
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to load products');
-    }
-  }
-);
+interface EditProductPayloadAction {
+  _id: string
+  product: Product
+}
 
 const initialState: ProductsState = {
-  items: [],
-  loading: false,
-  error: null
+  products: []
 }
 
 const productsSlice = createSlice({
@@ -34,36 +19,27 @@ const productsSlice = createSlice({
   initialState,
 
   reducers: {
+    setAllProducts: (state, action: PayloadAction<Product[]>) => {
+      state.products = action.payload
+    },
     addProduct: (state, action: PayloadAction<Product>) => {
-      state.items.push(action.payload);
+      state.products.push(action.payload)
     },
-    updateProductStatus: (
-      state,
-      action: PayloadAction<{ _id: string; isAvailable: boolean }>
-    ) => {
-      const { _id, isAvailable } = action.payload;
-      const product = state.items.find((p) => p._id === _id);
-      if (product) product.isAvailable = isAvailable;
+    editProduct: (state, action: PayloadAction<EditProductPayloadAction>) => {
+      state.products = state.products.map(p => p._id === action.payload._id ? action.payload.product : p)
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+    editProductStatus: (state, action: PayloadAction<string>) => {
+      state.products = state.products.map(p => {
+        if (p._id === action.payload)
+          p.isAvailable = !p.isAvailable
+        return p
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = action.payload;
-      })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
-});
+    },
+    deleteProduct: (state, action: PayloadAction<string>) => {
+      state.products = state.products.filter(p => p._id !== action.payload)
+    }
+  }
+})
 
-export const { addProduct, updateProductStatus } = productsSlice.actions;
-export default productsSlice.reducer;
-
-
+export const { setAllProducts, addProduct, editProduct, editProductStatus, deleteProduct } = productsSlice.actions
+export default productsSlice.reducer

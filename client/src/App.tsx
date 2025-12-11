@@ -6,11 +6,10 @@ import { useAppContext } from './context/AppContext'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/layout/Footer/Footer'
 import { useEffect } from 'react'
-import { useUserLoader } from './hooks/UserLoader'
 
 const App = () => {
 
-  const { isSidebarOpen, closeSidebar } = useAppContext()
+  const { isSidebarOpen, closeSidebar, authorizeUser } = useAppContext()
 
   useEffect(() => {
     if (isSidebarOpen) {
@@ -22,7 +21,9 @@ const App = () => {
     return () => document.body.classList.remove('overflow-hidden')
   }, [isSidebarOpen])
 
-  useUserLoader()
+  useEffect(() => {
+    authorizeUser()
+  }, [authorizeUser])
 
   return (
     <div className='min-h-screen flex flex-col'>
@@ -31,13 +32,13 @@ const App = () => {
       {
         isSidebarOpen && (
           <div
-            className={`fixed inset-0 bg-black/30 z-20 transition-opacity ${isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            className={`fixed inset-0 bg-black/30 z-50 transition-opacity ${isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             onClick={closeSidebar}
           />
         )
       }
 
-      <aside className={`fixed top-0 left-0 h-screen w-74 transform z-30 bg-white transition-transform duration-300 rounded-r-xl ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed top-0 left-0 h-screen w-74 transform z-60 bg-white transition-transform duration-300 rounded-r-xl ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar />
       </aside>
 

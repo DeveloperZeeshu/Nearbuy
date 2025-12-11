@@ -1,21 +1,14 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-import type { UserProfile } from "../types/shop.types"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { ShopInfo } from "../types/shop.types";
 
 interface AuthState {
-    status: boolean,
-    accessToken: string | null
-    user: UserProfile | null
-}
-
-interface LoginPayload {
-    accessToken: string
-    user: UserProfile
+    status: boolean
+    shop: ShopInfo | null
 }
 
 const initialState: AuthState = {
     status: false,
-    accessToken: null,
-    user: null
+    shop: null
 }
 
 const authSlice = createSlice({
@@ -23,19 +16,19 @@ const authSlice = createSlice({
     initialState,
 
     reducers: {
-        login: (state, action: PayloadAction<LoginPayload>) => {
-            state.status = true,
-            state.accessToken = action.payload.accessToken
-            state.user = action.payload.user
+        login: (state, action: PayloadAction<ShopInfo>) => {
+            state.status = true
+            state.shop = action.payload
         },
         logout: (state) => {
-            state.status = false,
-            state.accessToken = null
-            state.user = null
+            state.status = false
+            state.shop = null
+        },
+        updateProfile: (state, action: PayloadAction<ShopInfo>) => {
+            state.shop = action.payload
         }
     }
 })
 
-export const { login, logout } = authSlice.actions
+export const { login, logout, updateProfile } = authSlice.actions
 export default authSlice.reducer
-

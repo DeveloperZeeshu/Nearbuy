@@ -7,15 +7,13 @@ const verifyAccessToken = async (
     next: NextFunction
 ) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader?.startsWith('Bearer '))
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
-
-        const token = authHeader.split(' ')[1];
+        const token = req.cookies.access_token
+        if (!token)
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         const decoded = await verifyJWTToken(token)
         if (!decoded)
-            return res.status(403).json({ success: false, message: 'Invalid token.' })
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         req.userId = decoded.sub;
         next();

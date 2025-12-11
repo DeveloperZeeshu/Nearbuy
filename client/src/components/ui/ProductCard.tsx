@@ -1,5 +1,5 @@
 import { fromLeftVariants } from '../../animations/fromLeftVariants'
-import Button from './Button'
+import Button from './button/Button'
 import { motion } from 'motion/react'
 
 interface ProdInfo {

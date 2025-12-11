@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
-import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyPassword } from "../services/auth.services.js"
+import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
+import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyJWTToken, verifyPassword } from "../services/auth.services.js"
 import Session from "../models/session.model.js";
 import { baseConfig } from "../conf/cookieBaseConfig.js";
 
@@ -120,13 +120,19 @@ export const postLoginPage = async (req: Request, res: Response) => {
             maxAge: REFRESH_TOKEN_EXPIRY,
         })
 
+        res.cookie('access_token', accessToken, {
+            ...baseConfig,
+            maxAge: ACCESS_TOKEN_EXPIRY
+        })
+
+        const shopInfo = await getShopByShopId(shop._id as string)
+        if (!shopInfo)
+            return res.status(500).json({ success: false, message: 'Something went wrong.' })
+
         return res.status(200).json({
             success: true,
             message: 'Logged in successfully.',
-            accessToken,
-            sub: shop._id,
-            name: shop.ownerName,
-            email: shop.email
+            shopInfo
         })
     } catch (err) {
         // console.log(err)
@@ -145,15 +151,18 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         const session = await findSessionByToken(hashedToken)
 
         if (!session) {
-            res.clearCookie('refresh_token', baseConfig)
+            // res.clearCookie('refresh_token', baseConfig)
+            // res.clearCookie('access_token', baseConfig)
 
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
         }
 
         const shop = await getShopByShopId(session.shopId.toString())
 
-        if (!shop)
+        if (!shop) {
+            await Session.deleteOne({ _id: session._id })
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
+        }
 
         //refreshing Refresh Token
         const newRefreshToken = createRefreshToken()
@@ -170,6 +179,7 @@ export const getRefreshPage = async (req: Request, res: Response) => {
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
         res.clearCookie('refresh_token', baseConfig)
+        res.clearCookie('access_token', baseConfig)
 
         res.cookie('refresh_token', newRefreshToken, {
             ...baseConfig,
@@ -177,21 +187,22 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         })
 
         // refreshing Access Token
-        const accessToken = await createAccessToken({
+        const newAccessToken = await createAccessToken({
             sub: shop._id as string,
             name: shop.ownerName,
             email: shop.email,
         })
 
-        if (!accessToken)
+        if (!newAccessToken)
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
+        res.cookie('access_token', newAccessToken, {
+            ...baseConfig,
+            maxAge: ACCESS_TOKEN_EXPIRY
+        })
+
         return res.status(200).json({
-            success: true,
-            accessToken,
-            sub: shop._id,
-            ownerName: shop.ownerName,
-            email: shop.email
+            success: true
         })
 
     } catch (err) {
@@ -218,7 +229,8 @@ export const logoutUserPage = async (req: Request, res: Response) => {
         if (!deletedSession)
             return res.status(501).json({ success: false, message: 'Something went wrong.' })
 
-        res.clearCookie('refresh_token', baseConfig);
+        res.clearCookie('refresh_token', baseConfig)
+        res.clearCookie('access_token', baseConfig)
 
         return res.status(200).json({ success: true, message: 'User logout successfully.' })
     } catch (err) {
@@ -227,4 +239,35 @@ export const logoutUserPage = async (req: Request, res: Response) => {
     }
 }
 
+export const getMe = async (req: Request, res: Response) => {
+    try {
+        const refreshToken = req.cookies.refresh_token
+        const accessToken = req.cookies.access_token
+
+        if (!refreshToken)
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
+
+        if (accessToken) {
+            const decodedAccessToken = await verifyJWTToken(accessToken)
+            if (decodedAccessToken) {
+                const shopInfo = await getShopByShopId(decodedAccessToken.sub)
+                if (!shopInfo)
+                    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+
+                return res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: 'Authorized.',
+                        shopInfo
+                    })
+            }
+        }
+
+        return res.status(401).json({ success: false, message: 'Unauthorized.' })
+    } catch (err) {
+        // console.log('Server Error:',err)
+        return res.status(500).json({ success: false, message: 'Internal server error.' })
+    }
+}
 

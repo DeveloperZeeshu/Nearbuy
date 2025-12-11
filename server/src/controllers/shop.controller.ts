@@ -84,7 +84,7 @@ export const putUpdateShop = async (req: Request, res: Response) => {
         if (!updatedShop)
             return res.status(501).json({ success: false, message: 'Unable to update shop.' })
 
-        return res.status(200).json({ success: true, message: 'Updated successfully.' })
+        return res.status(200).json({ success: true, message: 'Updated successfully.', updatedShop })
 
     } catch (err) {
         // console.log(err)

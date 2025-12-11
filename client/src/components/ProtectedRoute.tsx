@@ -4,18 +4,23 @@ import { useSelector } from "react-redux"
 
 import type { RootState } from "../store/store.js"
 import { Navigate } from "react-router-dom"
+import { useAppContext } from "../context/AppContext.js"
 
 interface ProtectedRouteProps {
     children: ReactNode
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+    const { loading } = useAppContext()
 
-    const accessToken = useSelector((state: RootState) => state.auth.accessToken)
+    const status = useSelector((state: RootState) => state.auth.status)
 
-    if (!accessToken)
+    if (!status)
         return <Navigate to='/' replace />
 
-    return children
+    if (!loading)
+        return <>{children}</>
 }
+
+
 

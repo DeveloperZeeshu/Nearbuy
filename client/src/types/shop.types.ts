@@ -15,11 +15,11 @@ export interface ShopInfo {
     ownerName: string
     email: string
     password: string
-    phone: number
+    phone: string
     address: string
     city: string
     state: string
-    zipcode?: number
+    zipcode?: string
     location?: ShopLocation
     imageUrl?: string
     isVerified?: boolean

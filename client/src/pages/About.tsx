@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Container from '../components/container/Container'
-import Button from '../components/ui/Button'
+import Button from '../components/ui/button/Button'
 import { MapPin, Search, Store } from 'lucide-react'
 import { motion } from 'motion/react'
 import { fromLeftVariants } from '../animations/fromLeftVariants'
@@ -13,15 +13,17 @@ const About = () => {
                 variants={fromLeftVariants}
                 initial='hidden'
                 animate='show'
-                className='flex flex-col gap-6 px-4 lg:px-10 py-8 rounded-xl shadow-lg hover:shadow-xl bg-white max-w-3xl mx-auto'>
+                className='w-full min-h-screen flex flex-col gap-6 p-3 lg:p-5 rounded-xl shadow-md mx-auto bg-linear-to-br from-slate-100 via-slate-200 to-slate-300'>
 
-                <h1 className='text-2xl font-bold text-gray-800 text-center'>
-                    About NearBuy
-                </h1>
+                <div>
+                    <h1 className='text-3xl font-bold text-gray-800 text-center'>
+                        About <span className='text-black'>NearBuy</span>
+                    </h1>
 
-                <p className='text-gray-600 text-center'>
-                    Your smart way to discover nearby products instantly.
-                </p>
+                    <p className='text-gray-500 mt-1 text-sm text-center'>
+                        Your smart way to discover nearby products instantly.
+                    </p>
+                </div>
 
                 <div className='space-y-3 text-gray-700 leading-relaxed'>
                     <p>
@@ -42,17 +44,17 @@ const About = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4'>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-gray-50 text-center shadow-sm'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
                         <Search />
                         <p className='font-semibold mt-2'>Smart Search</p>
                         <p className='text-sm text-gray-600'>Find products nearby instantly</p>
                     </div>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-gray-50 text-center shadow-sm'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
                         <MapPin />
                         <p className='font-semibold mt-2'>Live Distance</p>
                         <p className='text-sm text-gray-600'>View shop distance in real-time</p>
                     </div>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-gray-50 text-center shadow-sm'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
                         <Store />
                         <p className='font-semibold mt-2'>For Local Shops</p>
                         <p className='text-sm text-gray-600'>Powerful shop management dashboard</p>
@@ -63,7 +65,7 @@ const About = () => {
                     Start searching for nearby products with NearBuy
                 </p>
 
-                <div className='text-center'>
+                <div className='w-full flex items-center justify-center'>
                     <Button
                         text='Search Products'
                         onClick={() => navigate('/')}

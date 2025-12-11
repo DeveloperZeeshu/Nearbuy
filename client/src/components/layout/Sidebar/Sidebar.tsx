@@ -1,5 +1,5 @@
 
-import Button from '../../ui/Button.js'
+import Button from '../../ui/button/Button.js'
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { type ElementType } from 'react';
 import { useAppContext } from '../../../context/AppContext.js'
@@ -22,7 +22,6 @@ const SideBar = () => {
 
     const { closeSidebar } = useAppContext()
     const authStatus = useSelector((state: RootState) => state.auth.status)
-    const accessToken = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
 
     const navItems: NavItem[] = [
@@ -65,10 +64,8 @@ const SideBar = () => {
     ]
 
     const handleLogout = async () => {
-        if (!accessToken)
-            return
         try {
-            const res = await logoutUser(accessToken)
+            const res = await logoutUser()
             if (res?.success) {
                 toast.success('Logout successfully.')
                 dispatch(logout())

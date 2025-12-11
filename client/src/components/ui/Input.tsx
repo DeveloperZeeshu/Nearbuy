@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
             <input
                 type={type}
                 id={id}
-                className={`border-2 border-gray-300 focus:border-indigo-600  rounded-lg focus:outline-none py-2.5 px-4 w-full ${className}`}
+                className={`border-2 border-gray-300 focus:border-black  rounded-md focus:outline-none py-[.55rem] px-4 w-full ${className}`}
                 placeholder={placeholder}
                 ref={ref}
                 {...props}
