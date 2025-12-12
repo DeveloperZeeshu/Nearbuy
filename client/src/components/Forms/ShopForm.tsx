@@ -57,7 +57,10 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
     const submit: SubmitHandler<RegisterFormData | UpdateProfileFormData> = async (data) => {
         setLoading(true)
         const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
-        if (!userRes) return
+        if (!userRes) {
+            setLoading(false)
+            return
+        }
 
         const { lat, lng } = await getCurrentLocation()
 

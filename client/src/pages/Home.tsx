@@ -11,8 +11,11 @@ import { fromRightVariants } from "../animations/fromRightVariants.ts"
 import { ListCheck, MapPin, Store, Zap } from "lucide-react"
 import { searchProductsSchema, type SearchProductFormData } from "../validator/search_validator.ts"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import LoadingButton from "../components/ui/button/LoadingButton.tsx"
 
 const Home = () => {
+    const [loading, setLoading] = useState<boolean>(false)
     const {
         register,
         handleSubmit,
@@ -22,8 +25,12 @@ const Home = () => {
     const navigate = useNavigate()
 
     const onSubmit: SubmitHandler<SearchProductFormData> = async (data) => {
+        setLoading(true)
         const userRes = confirm('We use your location to show nearby shops. Do you want to enable it?')
-        if (!userRes) return
+        if (!userRes) {
+            setLoading(false)
+            return
+        }
 
         const { lat, lng } = await getCurrentLocation()
 
@@ -35,6 +42,7 @@ const Home = () => {
                 data.category
             )}&radius=${data.radius}&lat=${lat}&lng=${lng}`
         );
+        setLoading(false)
     };
     return (
         <Container>
@@ -109,7 +117,10 @@ const Home = () => {
 
                         {/* SEARCH BUTTON */}
                         <div className="w-full lg:w-auto">
-                            <Button type="submit" text="Search Nearby" className="h-11 w-full" />
+                            {loading ?
+                                <LoadingButton /> :
+                                <Button type="submit" text="Search Nearby" className="h-11 w-full" />
+                            }
                         </div>
                     </motion.form>
                 </motion.div>

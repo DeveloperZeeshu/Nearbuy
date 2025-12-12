@@ -88,7 +88,7 @@ const ShopDashboard = () => {
                     />
 
                     {/* PRODUCTS */}
-                    <div className="lg:col-span-2 bg-white/70 backdrop-blur-xl rounded-lg p-6 shadow-sm">
+                    <div className="lg:col-span-2 bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm">
 
                         {/* TOP BAR */}
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
@@ -109,12 +109,12 @@ const ShopDashboard = () => {
                         </div>
 
                         {/* PRODUCT LIST */}
-                        <div className="space-y-4">
+                        <div className="space-y-2 lg:space-y-4">
                             {filtered.length === 0 && <p className="text-center text-gray-500">No Product found.</p>}
                             {filtered.map((item) => (
                                 <div
                                     key={item._id}
-                                    className="flex items-center justify-between p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all"
+                                    className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all"
                                 >
                                     <div>
                                         <p className="font-semibold text-slate-800">
@@ -144,14 +144,14 @@ const ShopDashboard = () => {
                 {/* BOTTOM PANELS */}
                 <div className="grid md:grid-cols-2 gap-3 lg:gap-5 mt-3 lg:mt-5">
 
-                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-6 shadow-sm transition">
+                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
                         <h3 className="font-semibold mb-3 text-lg">Recent Orders</h3>
                         <p className="text-sm text-slate-500">
                             No recent orders yet.
                         </p>
                     </div>
 
-                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-6 shadow-sm transition">
+                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
                         <h3 className="font-semibold mb-4 text-lg">Quick Actions</h3>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -196,7 +196,7 @@ export const StatCard = ({
             {stats.map((item, i) => (
                 <div
                     key={i}
-                    className="bg-white/70 backdrop-blur-xl rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 >
                     <p className="text-sm text-slate-500 mb-1">{item.label}</p>
                     <p className="text-3xl font-bold text-slate-800">
@@ -211,7 +211,7 @@ export const StatCard = ({
 //ShopInfo Component
 export const ShopInfoCard = ({ shop }: { shop: ShopInfo | null }) => {
     return (
-        <div className="bg-white/70 backdrop-blur-xl rounded-lg p-6 shadow-sm transition">
+        <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
             <h3 className="font-semibold text-slate-800 mb-4 text-lg">
                 Shop Info
             </h3>

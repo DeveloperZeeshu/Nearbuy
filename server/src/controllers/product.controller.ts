@@ -34,7 +34,7 @@ export const addProduct = async (req: Request, res: Response) => {
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find()
+    const products = await Product.find({ shopId: req.userId })
 
     if (!products)
       return res.status(404).json({ success: false, message: 'Products not found.' })

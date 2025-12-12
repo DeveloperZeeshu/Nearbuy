@@ -30,7 +30,7 @@ export const ProductCard = ({ prodInfo }: ProdInfoProps) => {
                 variants={fromLeftVariants}
                 initial='hidden'
                 animate='show'
-                className="bg-white rounded-lg p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full lg:w-auto h-auto">
+                className="bg-white rounded-lg p-4 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-full lg:w-auto h-auto max-w-xs">
                 <img src={img || `https://placehold.co/400x300?text=${name}`} alt={name} className="w-full h-50 object-cover rounded-lg mb-3" loading="lazy" />
 
                 <h3 className="font-semibold text-lg text-left">{name}</h3>

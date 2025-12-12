@@ -108,7 +108,7 @@ const SideBar = () => {
                                 key={nav.name}
                                 to={nav.slug}
                                 onClick={closeSidebar}
-                                className={({ isActive }) => `${isActive ? 'bg-indigo-50' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-indigo-50 px-2 flex gap-1.5 items-center`}>
+                                className={({ isActive }) => `${isActive ? 'bg-gray-100' : null} w-full py-2 text-left duration-200 rounded-lg hover:bg-gray-100 px-2 flex gap-1.5 items-center`}>
                                 {nav.icon && <nav.icon className='' size={19} />}
                                 {nav.name}
                             </NavLink>
@@ -117,7 +117,7 @@ const SideBar = () => {
                 </nav>
                 {
                     authStatus &&
-                    <div className='w-full hover:bg-indigo-50 rounded-lg py-2'>
+                    <div className='w-full hover:bg-gray-100 rounded-lg py-2'>
                         <button
                             className='flex px-2 justify-center items-center cursor-pointer gap-1'
                             onClick={handleLogout}>

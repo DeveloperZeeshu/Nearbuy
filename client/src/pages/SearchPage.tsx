@@ -103,13 +103,13 @@ const SearchPage = () => {
     return (
         <>
             <Container>
-                <div>
-                    <div className="flex flex-col justify-center items-center px-3 mb-6">
-                        <h2 className="text-2xl text-center font-bold">🔍Find What You Need, Nearby.</h2>
-                        <p className="text-gray-500 text-center">Showing products available near your location.</p>
+                <div className='bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5'>
+                    <div className="text-center mb-6">
+                        <h2 className="text-3xl text-slate-800 font-bold">🔍Find What You Need, Nearby.</h2>
+                        <p className="text-gray-500 text-sm mt-1">Showing products available near your location.</p>
                     </div>
 
-                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 place-items-center mt-4">
                         {
                             products && products.map((p) => (
                                 <ProductCard

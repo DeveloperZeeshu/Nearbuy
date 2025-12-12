@@ -58,11 +58,14 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
 
     if (!id) {
       toast.error('Something went wrong')
+      setLoading(false)
       return
     }
     const confirmRes = confirm('Are you sure you want to delete this product?')
-    if (!confirmRes)
+    if (!confirmRes) {
+      setLoading(false)
       return
+    }
 
     try {
       const res = await apiClient.delete(

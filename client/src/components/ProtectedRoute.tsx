@@ -5,6 +5,8 @@ import { useSelector } from "react-redux"
 import type { RootState } from "../store/store.js"
 import { Navigate } from "react-router-dom"
 import { useAppContext } from "../context/AppContext.js"
+import { Container } from "lucide-react"
+import DashboardSkeleton from "../shop/pages/dashboard/DashboardSkeleton.js"
 
 interface ProtectedRouteProps {
     children: ReactNode
@@ -15,11 +17,17 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
     const status = useSelector((state: RootState) => state.auth.status)
 
+    if (loading)
+        return (
+            <Container>
+                <DashboardSkeleton />
+            </Container>
+        )
+
     if (!status)
         return <Navigate to='/' replace />
 
-    if (!loading)
-        return <>{children}</>
+    return <>{children}</>
 }
 
 
