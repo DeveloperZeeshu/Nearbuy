@@ -90,8 +90,10 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
     setLoading(true)
 
     const confirmRes = confirm(`Are you sure you want to ${mode} product?`)
-    if (!confirmRes)
+    if (!confirmRes){
+      setLoading(false)
       return
+    }
 
     try {
       const payload = {
