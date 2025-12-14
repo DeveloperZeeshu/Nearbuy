@@ -155,7 +155,6 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         console.log('hashedToken:', hashedToken)
         console.log('sessionFromDb:', session)
 
-
         if (!session) {
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
         }
@@ -164,6 +163,8 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         const newAccessToken = await createAccessToken({
             sub: session.shopId.toString(),
         })
+
+        console.log(newAccessToken)
 
         if (!newAccessToken)
             return res.status(500).json({ success: false, message: 'Something went wrong.' })
