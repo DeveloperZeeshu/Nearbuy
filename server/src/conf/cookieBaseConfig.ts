@@ -1,9 +1,8 @@
-import conf from "./conf.js";
 
 interface BaseConfigType {
     httpOnly: boolean
     secure: boolean
-    sameSite: 'none' | 'lax'
+    sameSite: 'none'
     path: string
 }
 
