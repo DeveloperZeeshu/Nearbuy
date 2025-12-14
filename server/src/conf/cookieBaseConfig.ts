@@ -10,7 +10,7 @@ interface BaseConfigType {
 export const baseConfig: BaseConfigType = {
     httpOnly: true,
     secure: true,
-    sameSite: conf.environment === 'production' ? 'none' : 'lax',
+    sameSite: 'none',
     path: '/'
 }
 

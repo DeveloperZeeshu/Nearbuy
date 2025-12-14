@@ -103,9 +103,11 @@ const Home = () => {
 
                         {/* RADIUS */}
                         <div className="w-full lg:w-36">
+                            <label htmlFor="radius" aria-label="radius" />
                             <select
                                 {...register("radius")}
                                 defaultValue="5000"
+                                id="radius"
                                 className="w-full border-2 focus:border-black border-gray-300 
               rounded-md px-3 py-[.55rem] bg-gray-50"
                             >

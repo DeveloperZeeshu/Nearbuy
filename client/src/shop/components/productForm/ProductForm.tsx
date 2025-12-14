@@ -204,6 +204,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
               (loading ?
                 <LoadingButton bgColor='bg-red-600' /> :
                 <button
+                  type='button'
                   className="px-4 py-2.5 bg-red-600 hover:bg-red-500 rounded-md font-semibold text-white cursor-pointer active:scale-95"
                   onClick={() => handleDeleteProduct(product?._id)}
                 >

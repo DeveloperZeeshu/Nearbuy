@@ -115,6 +115,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 
+//Search Products based on location
 export const searchProducts = async (req: Request, res: Response) => {
   try {
     const { query, category, radius = 10000, lat, lng } = req.query as unknown as SearchTypes;
