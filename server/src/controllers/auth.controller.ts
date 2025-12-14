@@ -142,11 +142,19 @@ export const getRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
 
+        console.log('cookies:', req.cookies)
+        console.log('refresh_token:', req.cookies.refresh_token)
+
+
         if (!refreshToken)
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         const hashedToken = hashToken(refreshToken)
         const session = await findSessionByToken(hashedToken)
+
+        console.log('hashedToken:', hashedToken)
+        console.log('sessionFromDb:', session)
+
 
         if (!session) {
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
