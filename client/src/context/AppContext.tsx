@@ -70,11 +70,12 @@ const AppProvider = ({ children }: AppProviderProps) => {
                 dispatch(logout())
             }
         } catch (err: unknown) {
+            dispatch(logout())
             // console.log(err)
         } finally {
             setLoading(false)
         }
-    }, [])
+    }, [dispatch])
 
     //Fetch App Products of shop
     const fetchAllProducts = useCallback(async () => {
@@ -89,7 +90,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         } finally {
             setProductLoading(false)
         }
-    }, [])
+    }, [dispatch])
 
     return <AppContext.Provider value={{
         isProductFormOpen,

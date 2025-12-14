@@ -35,8 +35,6 @@ interface PasswordType {
 
 interface AccessTokenType {
     sub: string
-    name: string
-    email: string
 }
 
 export interface AccessTokenPayload {
@@ -159,15 +157,11 @@ export const createShop = async ({
 }
 
 export const createAccessToken = async ({
-    sub,
-    name,
-    email
+    sub
 }: AccessTokenType): Promise<string | null> => {
     try {
         return jwt.sign({
-            sub,
-            name,
-            email
+            sub
         }, conf.jwtSecret, {
             expiresIn: ACCESS_TOKEN_EXPIRY / MILLISECOND_PER_SECOND
         })

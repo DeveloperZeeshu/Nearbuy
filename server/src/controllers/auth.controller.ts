@@ -108,8 +108,6 @@ export const postLoginPage = async (req: Request, res: Response) => {
 
         const accessToken = await createAccessToken({
             sub: shop._id as string,
-            name: shop.ownerName,
-            email: shop.email
         })
 
         if (!accessToken)
@@ -143,7 +141,6 @@ export const postLoginPage = async (req: Request, res: Response) => {
 export const getRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
-        console.log('Refresh Token:',refreshToken)
 
         if (!refreshToken)
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
@@ -151,49 +148,13 @@ export const getRefreshPage = async (req: Request, res: Response) => {
         const hashedToken = hashToken(refreshToken)
         const session = await findSessionByToken(hashedToken)
 
-        console.log('Session found:', Boolean(session))
-
         if (!session) {
-            // res.clearCookie('refresh_token', baseConfig)
-            // res.clearCookie('access_token', baseConfig)
-
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
         }
-
-        const shop = await getShopByShopId(session.shopId.toString())
-
-        if (!shop) {
-            await Session.deleteOne({ _id: session._id })
-            return res.status(401).json({ success: false, message: 'Unauthorized.' })
-        }
-
-        //refreshing Refresh Token
-        const newRefreshToken = createRefreshToken()
-        const newHashedToken = hashToken(newRefreshToken)
-
-        const updatedSession = await Session.findOneAndUpdate(
-            { _id: session._id },
-            {
-                refreshToken: newHashedToken
-            },
-            { new: true }
-        )
-        if (!updatedSession)
-            return res.status(500).json({ success: false, message: 'Something went wrong.' })
-
-        res.clearCookie('refresh_token', baseConfig)
-        res.clearCookie('access_token', baseConfig)
-
-        res.cookie('refresh_token', newRefreshToken, {
-            ...baseConfig,
-            maxAge: session.expiresAt.getTime() - Date.now(),
-        })
 
         // refreshing Access Token
         const newAccessToken = await createAccessToken({
-            sub: shop._id as string,
-            name: shop.ownerName,
-            email: shop.email,
+            sub: session.shopId.toString(),
         })
 
         if (!newAccessToken)
@@ -203,12 +164,6 @@ export const getRefreshPage = async (req: Request, res: Response) => {
             ...baseConfig,
             maxAge: ACCESS_TOKEN_EXPIRY
         })
-
-        console.log('New refresh generated:', Boolean(newRefreshToken))
-        console.log('New access generated:', Boolean(newAccessToken))
-
-
-        console.log('Setting cookies...')
 
         return res.status(200).json({
             success: true
