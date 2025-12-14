@@ -143,7 +143,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
 export const getRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
-        console.log(refreshToken)
+        console.log('Refresh Token:',refreshToken)
 
         if (!refreshToken)
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
