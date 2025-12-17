@@ -22,3 +22,13 @@ export const deleteProductById = async (
     }
 }
 
+export const fetchPartialProducts = async (
+    shopId: string
+): Promise<IProduct[] | null> => {
+    try {
+        return await Product.find({ shopId }).limit(5)
+    } catch (err) {
+        // console.error('Error fetching partial products:', err)
+        throw err
+    }
+}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 const ShopFormSkeleton = () => {
     const navigate = useNavigate()
     return (
-        <div className="w-full flex flex-col items-center px-3">
+        <div className="w-full flex flex-col items-center bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5">
             <div className='w-full md:w-xl lg:w-4xl pl-3 lg:pl-0'>
                 <button
                     onClick={() => navigate('/')}
@@ -13,7 +13,7 @@ const ShopFormSkeleton = () => {
                     Back to Home
                 </button>
             </div>
-            <div className="animate-pulse shadow-xl flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 w-screen max-w-xl lg:max-w-4xl md:w-xl lg:w-4xl">
+            <div className="animate-pulse shadow-sm flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 w-full max-w-xl lg:max-w-4xl md:w-xl lg:w-4xl">
                 <div className="pb-15 flex flex-col items-center">
                     <div className="h-9 w-50 bg-gray-200 rounded-full mb-3" />
                     <div className="h-5 w-50 md:w-70 lg:w-70 bg-gray-200 rounded-full" />

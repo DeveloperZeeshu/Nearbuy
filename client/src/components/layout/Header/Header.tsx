@@ -150,19 +150,19 @@ const Header = () => {
                             <div className="absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-gray-300">
                                 <Link
                                     to="/shop/dashboard"
-                                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                                    className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-lg"
                                 >
                                     Dashboard
                                 </Link>
                                 <Link
                                     to="/shop/edit-profile"
-                                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                                    className="block px-4 py-2 text-sm hover:bg-gray-100 rounded-lg"
                                 >
                                     Profile
                                 </Link>
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 rounded-lg cursor-pointer"
                                 >
                                     Logout
                                 </button>

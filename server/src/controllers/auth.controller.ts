@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
 import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyJWTToken, verifyPassword } from "../services/auth.services.js"
-import Session from "../models/session.model.js";
 import { baseConfig } from "../conf/cookieBaseConfig.js";
 
 export const postRegisterPage = async (req: Request, res: Response) => {
@@ -68,7 +67,7 @@ export const postRegisterPage = async (req: Request, res: Response) => {
         if (!newShop)
             return res.status(500).json({ success: false, message: 'Registration unsuccessful.' })
 
-        return res.status(200).json({ success: true, message: 'User registered successfully.' })
+        return res.status(201).json({ success: true, message: 'User registered successfully.' })
 
     } catch (err) {
         // console.log(err)
@@ -142,7 +141,6 @@ export const getRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
 
-        console.log('cookies:', req.cookies)
         console.log('refresh_token:', req.cookies.refresh_token)
 
 
@@ -173,6 +171,8 @@ export const getRefreshPage = async (req: Request, res: Response) => {
             ...baseConfig,
             maxAge: ACCESS_TOKEN_EXPIRY
         })
+
+        console.log('Cookies setted.')
 
         return res.status(200).json({
             success: true

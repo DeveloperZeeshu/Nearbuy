@@ -59,7 +59,7 @@ const SignIn = () => {
                 variants={fromLeftVariants}
                 initial='hidden'
                 animate='show'
-                className="shadow-lg flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 hover:shadow-xl w-full max-w-118 lg:w-118">
+                className="shadow-sm flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 w-full max-w-118 lg:w-118">
 
                 <div className="pb-13">
                     <h2 className="text-2xl font-bold text-center">Welcome Back</h2>

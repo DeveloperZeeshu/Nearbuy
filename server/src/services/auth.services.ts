@@ -145,7 +145,7 @@ export const createShop = async ({
             zipcode,
             location: {
                 type: 'Point',
-                coordinates: [latitude, longitude]
+                coordinates: [longitude, latitude]
             },
         })
         await newShop.save()

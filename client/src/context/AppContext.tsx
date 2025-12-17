@@ -14,7 +14,7 @@ interface AppContextType {
     isProductFormOpen: boolean
     isSidebarOpen: boolean
     loading: boolean
-    productLoading: boolean
+    productsLoading: boolean
     editingProduct: ProductTabDetails | null
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
     openSidebar: () => void
@@ -33,7 +33,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const [isProductFormOpen, setIsProductFormOpen] = useState<boolean>(false)
     const [editingProduct, setEditingProduct] = useState<ProductTabDetails | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
-    const [productLoading, setProductLoading] = useState<boolean>(false)
+    const [productsLoading, setProductsLoading] = useState<boolean>(false)
 
     const dispatch = useDispatch()
 
@@ -79,7 +79,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
     //Fetch App Products of shop
     const fetchAllProducts = useCallback(async () => {
-        setProductLoading(true)
+        setProductsLoading(true)
         try {
             const res = await apiClient.get(`product/products`)
             if (res.status === 200) {
@@ -88,7 +88,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         } catch (err: unknown) {
             handleAxiosError(err)
         } finally {
-            setProductLoading(false)
+            setProductsLoading(false)
         }
     }, [dispatch])
 
@@ -103,7 +103,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
         closeProductForm,
         setLoading,
         loading,
-        productLoading,
+        productsLoading,
         authorizeUser,
         fetchAllProducts
     }}>

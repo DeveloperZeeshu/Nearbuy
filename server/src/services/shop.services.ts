@@ -31,7 +31,7 @@ export const updateShop = async ({
                     zipcode,
                     location: {
                         type: 'Point',
-                        coordinates: [latitude, longitude]
+                        coordinates: [longitude, latitude]
                     }
                 }
             },

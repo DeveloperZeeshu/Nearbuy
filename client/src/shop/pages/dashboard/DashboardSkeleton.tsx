@@ -4,7 +4,7 @@ const Skeleton = ({ className }: { className: string }) => (
 
 const DashboardSkeleton = () => {
     return (
-        <div className="w-full p-3 lg:p-5">
+        <div className="w-full bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5">
 
             {/* HEADER */}
             <div className="flex justify-between items-center mb-10">
@@ -20,7 +20,7 @@ const DashboardSkeleton = () => {
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div
                         key={i}
-                        className="p-6 rounded-lg bg-white"
+                        className="p-3 lg:p-5 rounded-lg bg-white"
                     >
                         <Skeleton className="h-4 w-20 mb-3" />
                         <Skeleton className="h-8 w-24" />
@@ -30,9 +30,9 @@ const DashboardSkeleton = () => {
 
             {/* QUICK ACTIONS */}
             <div className="flex flex-wrap gap-4 mb-10">
-                <Skeleton className="h-11 w-36 rounded-2xl" />
-                <Skeleton className="h-11 w-40 rounded-2xl" />
-                <Skeleton className="h-11 w-40 rounded-2xl" />
+                <Skeleton className="h-11 w-36 rounded-2xl bg-white" />
+                <Skeleton className="h-11 w-40 rounded-2xl bg-white" />
+                <Skeleton className="h-11 w-40 rounded-2xl bg-white" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-5">
@@ -47,34 +47,7 @@ const DashboardSkeleton = () => {
                 </div>
 
                 {/* PRODUCTS */}
-                <div className="lg:col-span-2 p-3 lg:p-5 rounded-lg bg-white">
-
-                    {/* TOP BAR */}
-                    <div className="flex gap-2 justify-between items-center mb-6">
-                        <Skeleton className="h-5 w-25 lg:w-32" />
-                        <Skeleton className="h-10 w-60 rounded-lg" />
-                    </div>
-
-                    {/* PRODUCT LIST */}
-                    <div className="space-y-4">
-                        {Array(4).fill(null).map((_, i) => (
-                            <div
-                                key={i}
-                                className="flex justify-between p-4 rounded-lg bg-slate-100"
-                            >
-                                <div className="space-y-2">
-                                    <Skeleton className="h-4 w-25 lg:w-38" />
-                                    <Skeleton className="h-3 w-20 lg:w-28" />
-                                </div>
-
-                                <div className="flex gap-3 items-center">
-                                    <Skeleton className="h-7 w-18 rounded-full" />
-                                    <Skeleton className="h-4 w-12" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <DashboardProductsSkeleton />
             </div>
 
             {/* BOTTOM PANELS */}
@@ -99,3 +72,36 @@ const DashboardSkeleton = () => {
 };
 
 export default DashboardSkeleton;
+
+
+export const DashboardProductsSkeleton = () => {
+    return (
+        <div className="lg:col-span-2 p-3 lg:p-5 rounded-lg bg-white">
+
+            {/* TOP BAR */}
+            <div className="flex gap-2 justify-between items-center mb-6">
+                <Skeleton className="h-5 w-25 lg:w-32" />
+                <Skeleton className="h-10 w-60 rounded-lg" />
+            </div>
+
+            {/* PRODUCT LIST */}
+            <div className="space-y-2 lg:space-y-5">
+                {Array(4).fill(null).map((_, i) => (
+                    <div
+                        key={i}
+                        className="flex justify-between p-3 lg:p-5 rounded-lg bg-slate-100"
+                    >
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-25 lg:w-38" />
+                            <Skeleton className="h-3 w-20 lg:w-28" />
+                        </div>
+
+                        <div className="flex gap-3 items-center">
+                            <Skeleton className="h-7 w-18 rounded-full" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}

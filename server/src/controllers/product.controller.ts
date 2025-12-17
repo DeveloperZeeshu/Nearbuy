@@ -1,15 +1,19 @@
 import { Request, Response } from 'express'
-import Product from '../models/product.model.js'
+import Product, { IProduct } from '../models/product.model.js'
 import Shop from '../models/shop.model.js'
 import { deleteProductById, getProductById } from '../services/product.services.js'
+import { PipelineStage } from 'mongoose'
 
 interface SearchTypes {
   query?: string
   category?: string
   radius?: number
-  lat?: number
-  lng?: number
+  lat?: string
+  lng?: string
 }
+
+const escapeRegex = (text: string) =>
+  text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
@@ -34,7 +38,7 @@ export const addProduct = async (req: Request, res: Response) => {
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find({ shopId: req.userId })
+    const products = await Product.find({ shopId: req.userId }).limit(20)
 
     if (!products)
       return res.status(404).json({ success: false, message: 'Products not found.' })
@@ -115,47 +119,6 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 
-//Search Products based on location
-export const searchProducts = async (req: Request, res: Response) => {
-  try {
-    const { query, category, radius = 10000, lat, lng } = req.query as unknown as SearchTypes;
-
-    if (!lat || !lng)
-      return res.status(400).json({ success: false, message: 'Location required' });
-
-    const nearbyShops = await Shop.find({
-      location: {
-        $near: {
-          $geometry: { type: 'Point', coordinates: [parseFloat(String(lat)), parseFloat(String(lng))] },
-          $maxDistance: parseInt(String(radius)),
-        },
-      },
-    }).select('_id');
-
-    const shopIds = nearbyShops.map((shop) => shop._id);
-
-    if (shopIds.length === 0) {
-      return res.status(200).json({ success: true, products: [] });
-    }
-
-    const filters = {
-      shopId: { $in: shopIds },
-      isAvailable: true,
-      ...(query && { name: { $regex: query, $options: 'i' } }),
-      ...(category && category !== 'All Categories' && { category }),
-    };
-
-    const products = await Product.find(filters)
-      .populate('shopId', 'shopName address phone location');
-
-    res.status(200).json({ success: true, products });
-  } catch (err) {
-    // console.error('Error in searchProducts:', err);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
-
-
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
@@ -180,3 +143,111 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
 }
 
+
+//Search Products based on location
+export const searchProducts = async (req: Request, res: Response) => {
+  try {
+    const { query, category, radius = 10000, lat, lng } = req.query as unknown as SearchTypes;
+
+    if (!query || query.length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search query must be at least 2 characters.'
+      })
+    }
+
+    const latitude = Number(lat)
+    const longitude = Number(lng)
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid coordinates.'
+      })
+    }
+
+    const coordinates: [number, number] = [longitude, latitude]
+
+    //limit radius
+    const MAX_RADIUS = 50000
+    const safeRadius = Math.min(Number(radius) || 10000, MAX_RADIUS)
+
+    const safeQuery = escapeRegex(query)
+
+    const productMatch: Record<string, any> = {
+      $expr: { $eq: ['$shopId', '$$shopId'] },
+      name: { $regex: safeQuery, $options: 'i' },
+      isAvailable: true
+    }
+    if (category && category !== 'All Categories')
+      productMatch.category = category
+
+    //Aggregation Pipeline
+    const pipeline: PipelineStage[] = [
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates
+          },
+          distanceField: 'distance',
+          maxDistance: safeRadius,
+          spherical: true
+        }
+      },
+      {
+        $lookup: {
+          from: 'products',
+          let: { shopId: '$_id' },
+          pipeline: [
+            { $match: productMatch },
+            {
+              $project: {
+                shopId: 0,
+                createdAt: 0,
+                updatedAt: 0,
+                __v: 0
+              }
+            }
+          ],
+          as: 'product'
+        }
+      },
+      {
+        $unwind: '$product'
+      },
+      {
+        $addFields: {
+          distanceKm: {
+            $round: [{ $divide: ['$distance', 1000] }, 2]
+          }
+        }
+      },
+      {
+        $project: {
+          password: 0,
+          distance: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0
+        }
+      },
+      { $sort: { distanceKm: 1, 'product.price': 1 } },
+      { $limit: 20 }
+    ]
+
+    const products = await Shop.aggregate(pipeline)
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      products
+    });
+  } catch (err) {
+    // console.error('Error in searchProducts:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};

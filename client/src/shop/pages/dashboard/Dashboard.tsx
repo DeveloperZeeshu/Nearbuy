@@ -1,6 +1,6 @@
 import Container from "../../../components/container/Container";
 import { useEffect, useState } from "react";
-import DashboardSkeleton from "./DashboardSkeleton";
+import DashboardSkeleton, { DashboardProductsSkeleton } from "./DashboardSkeleton";
 import { Search } from "lucide-react";
 import { useAppContext } from "../../../context/AppContext";
 import { Link } from "react-router-dom";
@@ -11,21 +11,21 @@ import type { ShopInfo } from "../../../types/shop.types";
 const ShopDashboard = () => {
     const [search, setSearch] = useState<string>("");
 
-    const { openProductForm, loading, fetchAllProducts, productLoading } = useAppContext()
+    const { openProductForm, loading, productsLoading, fetchAllProducts } = useAppContext()
 
     const shop = useSelector((state: RootState) => state.auth.shop)
     const products = useSelector((state: RootState) => state.products.products)
-
-    const filtered = products.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase())
-    );
 
     useEffect(() => {
         if (!products || products.length === 0)
             fetchAllProducts()
     }, [fetchAllProducts])
 
-    if (loading || productLoading)
+    const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase())
+    )
+
+    if (loading)
         return (
             <Container>
                 <DashboardSkeleton />
@@ -89,55 +89,56 @@ const ShopDashboard = () => {
 
                     {/* PRODUCTS */}
                     <div className="lg:col-span-2 bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm">
-
-                        {/* TOP BAR */}
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                            <h3 className="text-lg font-semibold">Products</h3>
-
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Search products..."
-                                    className="w-full h-10 pl-10 pr-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black"
-                                />
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700">
-                                    <Search size={19} />
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* PRODUCT LIST */}
-                        <div className="space-y-2 lg:space-y-4">
-                            {filtered.length === 0 && <p className="text-center text-gray-500">No Product found.</p>}
-                            {filtered.map((item) => (
-                                <div
-                                    key={item._id}
-                                    className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all"
-                                >
-                                    <div>
-                                        <p className="font-semibold text-slate-800">
-                                            {item.name}
-                                        </p>
-                                        <p className="text-sm text-slate-500">
-                                            ₹{item.price} • Stock: {item.isAvailable ? 12 : 0}
-                                        </p>
+                        {
+                            productsLoading ?
+                                <DashboardProductsSkeleton /> :
+                                (<>
+                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                                        <h3 className="text-lg font-semibold">Products</h3>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={search}
+                                                onChange={(e) => setSearch(e.target.value)}
+                                                placeholder="Search products..."
+                                                className="w-full h-10 pl-10 pr-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black"
+                                            />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700">
+                                                <Search size={19} />
+                                            </span>
+                                        </div>
                                     </div>
+                                    <div className="space-y-2 lg:space-y-4">
+                                        {filtered.length === 0 && <p className="text-center text-gray-500">No Product found.</p>}
+                                        {filtered.slice(0, 5).map((item) => (
+                                            <div
+                                                key={item._id}
+                                                className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all"
+                                            >
+                                                <div>
+                                                    <p className="font-semibold text-slate-800">
+                                                        {item.name}
+                                                    </p>
+                                                    <p className="text-sm text-slate-500">
+                                                        ₹{item.price} • Stock: {item.isAvailable ? 12 : 0}
+                                                    </p>
+                                                </div>
 
-                                    <div className="flex items-center gap-4">
-                                        <span
-                                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${item.isAvailable
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-red-100 text-red-600"
-                                                }`}
-                                        >
-                                            {item.isAvailable ? "In Stock" : "Out of Stock"}
-                                        </span>
+                                                <div className="flex items-center gap-4">
+                                                    <span
+                                                        className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${item.isAvailable
+                                                            ? "bg-green-100 text-green-700"
+                                                            : "bg-red-100 text-red-600"
+                                                            }`}
+                                                    >
+                                                        {item.isAvailable ? "In Stock" : "Out of Stock"}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                </>)
+                        }
                     </div>
                 </div>
 

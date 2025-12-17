@@ -73,13 +73,13 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
             let res
             if (shopInfo) {
                 res = await apiClient.put(`/shop/updateShop`, finalData)
-                if (res?.data?.success) {
+                if (res.status === 200) {
                     toast.success('Profile updated successfully.')
                     dispatch(updateProfile(res.data.updatedShop))
                 }
             } else {
                 res = await apiClient.post(`/register`, finalData)
-                if (res?.data?.success) {
+                if (res.status === 201) {
                     toast.success('Registration successful.')
                     navigate('/login')
                 }
@@ -105,7 +105,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                 variants={fromLeftVariants}
                 initial='hidden'
                 animate='show'
-                className="shadow-md w-full flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 max-w-xl lg:max-w-4xl">
+                className="shadow-sm w-full flex flex-col items-center justify-center bg-white rounded-xl p-5 py-10 max-w-xl lg:max-w-4xl">
 
                 <div className="pb-15">
                     <h2 className="text-2xl font-bold text-center">{shopInfo ? 'Edit Shop Profile' : 'Register Your Shop'}</h2>

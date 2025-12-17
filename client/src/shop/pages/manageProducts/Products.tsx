@@ -11,7 +11,7 @@ import ProductListCard from "./ProductListCard";
 const ManageProducts = () => {
     const [search, setSearch] = useState<string>('')
 
-    const { openProductForm, fetchAllProducts, productLoading } = useAppContext()
+    const { openProductForm, productsLoading, fetchAllProducts } = useAppContext()
 
     const products = useSelector((state: RootState) => state.products.products)
 
@@ -24,7 +24,7 @@ const ManageProducts = () => {
         product.name.toLowerCase().includes(search.toLowerCase())
     )
 
-    if (productLoading)
+    if (productsLoading)
         return (
             <Container>
                 <ProductsSkeleton />

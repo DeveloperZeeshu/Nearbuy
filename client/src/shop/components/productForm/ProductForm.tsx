@@ -194,18 +194,18 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
           </div>
 
           {/* Price + Image */}
-          <div className="flex w-full justify-center gap-4">
+          <div className="flex w-full justify-center mt-3 gap-4">
             {
               loading ?
                 <LoadingButton /> :
-                <Button type="submit" text={mode} />
+                <Button type="submit" text={mode} className='w-full'/>
             }
             {mode === 'Edit' &&
               (loading ?
                 <LoadingButton bgColor='bg-red-600' /> :
                 <button
                   type='button'
-                  className="px-4 py-2.5 bg-red-600 hover:bg-red-500 rounded-md font-semibold text-white cursor-pointer active:scale-95"
+                  className="px-4 py-2.5 bg-red-600 hover:bg-red-500 rounded-md font-semibold text-white cursor-pointer active:scale-95 w-full"
                   onClick={() => handleDeleteProduct(product?._id)}
                 >
                   Delete

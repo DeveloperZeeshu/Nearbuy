@@ -7,6 +7,7 @@ import DashboardSkeleton from "./shop/pages/dashboard/DashboardSkeleton";
 import ProductsSkeleton from "./shop/pages/manageProducts/ProductsSkeleton";
 import ShopFormSkeleton from "./shop/pages/edit-profile/ShopFormSkeleton";
 import Container from "./components/container/Container";
+import SearchPageSkeleton from "./pages/SearchPage/SearchPageSkeleton";
 
 const Home = React.lazy(() => import('./pages/Home'))
 const ErrorPage = React.lazy(() => import('./pages/ErrorPage'))
@@ -14,7 +15,7 @@ const Register = React.lazy(() => import('./pages/Register'))
 const Login = React.lazy(() => import('./pages/Login'))
 const About = React.lazy(() => import('./pages/About'))
 const Shops = React.lazy(() => import('./pages/Shops'))
-const SearchPage = React.lazy(() => import('./pages/SearchPage'))
+const SearchPage = React.lazy(() => import('./pages/SearchPage/SearchPage'))
 
 const ShopLayout = React.lazy(() => import('./shop/ShopLayout'))
 const DashboardPage = React.lazy(() => import('./shop/pages/dashboard/Dashboard'))
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
             {
                 path: 'search',
                 element: (
-                    <Suspense fallback={<Loader />}>
+                    <Suspense fallback={<Container><SearchPageSkeleton /></Container>}>
                         <SearchPage />
                     </Suspense>
                 )
