@@ -16,6 +16,7 @@ const verifyAccessToken = async (
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         req.userId = decoded.sub;
+        req.sessionId = decoded.sid
         next();
     } catch (err: any) {
         console.error('Token verification error:', err);

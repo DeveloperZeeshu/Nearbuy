@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
-import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyJWTToken, verifyPassword } from "../services/auth.services.js"
+import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyJWTToken, verifyPassword } from "../services/auth.services.js"
 import { baseConfig } from "../conf/cookieBaseConfig.js";
 import Session from "../models/session.model.js";
 
@@ -108,6 +108,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
 
         const accessToken = await createAccessToken({
             sub: shop._id as string,
+            sid: session._id as string
         })
 
         if (!accessToken)
@@ -170,6 +171,7 @@ export const postRefreshPage = async (req: Request, res: Response) => {
 
         const newAccessToken = await createAccessToken({
             sub: session.shopId.toString(),
+            sid: session._id as string
         })
 
         res.cookie('refresh_token', newRefreshToken, {
@@ -199,21 +201,13 @@ export const postRefreshPage = async (req: Request, res: Response) => {
 
 export const logoutUserPage = async (req: Request, res: Response) => {
     try {
-        if (!req.userId)
+        if (!req.userId || !req.sessionId)
             return res.status(401).json({ success: false, message: 'Unauthorized.' });
 
-        const refreshToken = req.cookies.refresh_token
+        const deletedSession = await Session.findOneAndDelete({ _id: req.sessionId })
 
-        const hashedToken = hashToken(refreshToken)
-
-        const session = await findSessionByToken(hashedToken)
-
-        if (!session)
-            return res.status(401).json({ success: false, message: 'Unauthorized.' })
-
-        const deletedSession = await deleteSession(session._id as string)
         if (!deletedSession)
-            return res.status(500).json({ success: false, message: 'Something went wrong.' })
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         res.clearCookie('refresh_token', {
             ...baseConfig,
