@@ -137,7 +137,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
     }
 }
 
-export const getRefreshPage = async (req: Request, res: Response) => {
+export const postRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
 

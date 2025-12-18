@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
       // Single refresh at a time
       if (!refreshPromise) {
         refreshPromise = apiClient
-          .get('/refresh')
+          .post('/refresh')
           .then(() => {})
           .finally(() => {
             refreshPromise = null
