@@ -10,7 +10,6 @@ import { handleAxiosError } from '../../api/utils/handleAxiosError.js'
 import type { ShopInfo } from '../../types/shop.types.js'
 import { motion } from 'motion/react'
 import { fromLeftVariants } from '../../animations/fromLeftVariants.js'
-import { ArrowLeft } from 'lucide-react'
 import LoadingButton from '../ui/button/LoadingButton.js'
 import apiClient from '../../api/apiClient.js'
 import { registerValidationSchema, updateProfileSchema, type RegisterFormData, type UpdateProfileFormData } from '../../validator/auth_validator.js'
@@ -93,14 +92,14 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
 
     return (
         <div className='w-full flex flex-col items-center'>
-            <div className='w-full md:w-xl lg:w-4xl'>
+            {/* <div className='w-full md:w-xl lg:w-4xl'>
                 <button
                     onClick={() => navigate(shopInfo ? '/shop/dashboard' : '/')}
                     className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
                 ><ArrowLeft size={18} />
                     Back to Home
                 </button>
-            </div>
+            </div> */}
             <motion.div
                 variants={fromLeftVariants}
                 initial='hidden'
@@ -217,7 +216,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
 
                         {
                             !isUpdate &&
-                            <div className="w-full mt-5 lg:mt-0">
+                            (<div className="w-full mt-5 lg:mt-0">
                                 <Input
                                     label='Confirm Password'
                                     type="password"
@@ -225,7 +224,7 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
                                     errors={errors.confirmPassword}
                                     {...register('confirmPassword')}
                                 />
-                            </div>}
+                            </div>)}
                     </div>
 
                     {

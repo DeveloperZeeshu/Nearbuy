@@ -9,7 +9,6 @@ import { login } from '../../store/authSlice.js'
 import { handleAxiosError } from '../../api/utils/handleAxiosError.js'
 import { motion } from 'motion/react'
 import { fromLeftVariants } from '../../animations/fromLeftVariants.js'
-import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import LoadingButton from '../ui/button/LoadingButton.js'
 import apiClient from '../../api/apiClient.js'
@@ -47,14 +46,14 @@ const SignIn = () => {
 
     return (
         <div className='w-full flex flex-col items-center'>
-            <div className='w-full max-w-118 lg:w-118'>
+            {/* <div className='w-full max-w-118 lg:w-118'>
                 <button
                     onClick={() => navigate('/')}
                     className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
                 ><ArrowLeft size={18} />
                     Back to Home
                 </button>
-            </div>
+            </div> */}
             <motion.div
                 variants={fromLeftVariants}
                 initial='hidden'

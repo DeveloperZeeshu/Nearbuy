@@ -1,5 +1,4 @@
 
-import Button from '../../ui/button/Button.js'
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { type ElementType } from 'react';
 import { useAppContext } from '../../../context/AppContext.js'
@@ -85,18 +84,21 @@ const SideBar = () => {
                 <p className="flex justify-end w-full"><X className="text-2xl cursor-pointer" onClick={closeSidebar} /></p>
                 {
                     !authStatus &&
-                    <div className={`flex justify-center items-center gap-5`}>
-                        <Link onClick={closeSidebar} to='/login'
-                            className="font-medium cursor-pointer">
-                            Login
+                    <div className={`flex justify-center items-center gap-3 h-9`}>
+                        <Link
+                            to="/login"
+                            className="text-sm font-medium text-black hover:text-black border bg-gray-50 rounded-md border-gray-300 px-3.5 h-full flex justify-center items-center hover:bg-gray-100 transition duration-150 "
+                            onClick={closeSidebar}
+                        >
+                            Log In
                         </Link>
-                        <Button
-                            text='Register Shop'
-                            onClick={() => {
-                                closeSidebar()
-                                navigate('/register')
-                            }}
-                        />
+                        <Link
+                            to="/register"
+                            className="text-sm font-medium border border-black text-white rounded-md bg-black px-3.5 h-full flex justify-center items-center hover:bg-gray-800"
+                            onClick={closeSidebar}
+                        >
+                            Register
+                        </Link>
                     </div>
                 }
 

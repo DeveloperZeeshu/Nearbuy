@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constants.js"
 import { createAccessToken, createRefreshToken, createSession, createShop, deleteSession, findSessionByToken, getShopByEmail, getShopByShopId, hashPassword, hashToken, verifyJWTToken, verifyPassword } from "../services/auth.services.js"
 import { baseConfig } from "../conf/cookieBaseConfig.js";
+import Session from "../models/session.model.js";
 
 export const postRegisterPage = async (req: Request, res: Response) => {
     const requiredFields = [
@@ -88,7 +89,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
 
         const isPasswordValid = await verifyPassword({ hashedPassword: shop.password, password })
 
-        if (!isPasswordValid) return res.status(401).json({ success: false, message: 'Invalid Password.' })
+        if (!isPasswordValid) return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         const refreshToken = createRefreshToken()
         if (!refreshToken)
@@ -103,7 +104,7 @@ export const postLoginPage = async (req: Request, res: Response) => {
         })
 
         if (!session)
-            return res.status(500).json({ success: false, message: 'Unable to create session.' })
+            return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
         const accessToken = await createAccessToken({
             sub: shop._id as string,
@@ -115,11 +116,13 @@ export const postLoginPage = async (req: Request, res: Response) => {
         res.cookie('refresh_token', refreshToken, {
             ...baseConfig,
             maxAge: REFRESH_TOKEN_EXPIRY,
+            path: '/api/refresh'
         })
 
         res.cookie('access_token', accessToken, {
             ...baseConfig,
-            maxAge: ACCESS_TOKEN_EXPIRY
+            maxAge: ACCESS_TOKEN_EXPIRY,
+            path: '/'
         })
 
         const shopInfo = await getShopByShopId(shop._id as string)
@@ -141,38 +144,45 @@ export const postRefreshPage = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refresh_token
 
-        console.log('refresh_token:', req.cookies.refresh_token)
-
-
         if (!refreshToken)
             return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
-        const hashedToken = hashToken(refreshToken)
-        const session = await findSessionByToken(hashedToken)
+        const hashedOld = hashToken(refreshToken)
 
-        console.log('hashedToken:', hashedToken)
-        console.log('sessionFromDb:', session)
+        //rotating refresh token
+        const newRefreshToken = createRefreshToken()
+        const hashedNew = hashToken(newRefreshToken)
 
-        if (!session) {
-            return res.status(401).json({ success: false, message: 'Unauthorized.' })
-        }
+        const session = await Session.findOneAndUpdate(
+            {
+                refreshToken: hashedOld,
+                expiresAt: { $gt: new Date() }
+            },
+            { refreshToken: hashedNew },
+            { new: true }
+        )
 
-        // refreshing Access Token
+        if (!session)
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized.'
+            })
+
         const newAccessToken = await createAccessToken({
             sub: session.shopId.toString(),
         })
 
-        console.log(newAccessToken)
-
-        if (!newAccessToken)
-            return res.status(500).json({ success: false, message: 'Something went wrong.' })
+        res.cookie('refresh_token', newRefreshToken, {
+            ...baseConfig,
+            maxAge: Math.max(0, new Date(session.expiresAt).getTime() - Date.now()),
+            path: '/api/refresh'
+        })
 
         res.cookie('access_token', newAccessToken, {
             ...baseConfig,
-            maxAge: ACCESS_TOKEN_EXPIRY
+            maxAge: ACCESS_TOKEN_EXPIRY,
+            path: '/'
         })
-
-        console.log('Cookies setted.')
 
         return res.status(200).json({
             success: true
@@ -180,14 +190,17 @@ export const postRefreshPage = async (req: Request, res: Response) => {
 
     } catch (err) {
         // console.log(err)
-        return res.status(500).json({ success: false, message: 'Internal server error.' })
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error.'
+        })
     }
 }
 
 export const logoutUserPage = async (req: Request, res: Response) => {
     try {
         if (!req.userId)
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
+            return res.status(401).json({ success: false, message: 'Unauthorized.' });
 
         const refreshToken = req.cookies.refresh_token
 
@@ -196,14 +209,20 @@ export const logoutUserPage = async (req: Request, res: Response) => {
         const session = await findSessionByToken(hashedToken)
 
         if (!session)
-            return res.status(404).json({ success: false, message: 'Invalid session.' })
+            return res.status(401).json({ success: false, message: 'Unauthorized.' })
 
         const deletedSession = await deleteSession(session._id as string)
         if (!deletedSession)
-            return res.status(501).json({ success: false, message: 'Something went wrong.' })
+            return res.status(500).json({ success: false, message: 'Something went wrong.' })
 
-        res.clearCookie('refresh_token', baseConfig)
-        res.clearCookie('access_token', baseConfig)
+        res.clearCookie('refresh_token', {
+            ...baseConfig,
+            path: '/api/refresh'
+        })
+        res.clearCookie('access_token', {
+            ...baseConfig,
+            path: '/'
+        })
 
         return res.status(200).json({ success: true, message: 'User logout successfully.' })
     } catch (err) {
@@ -214,33 +233,32 @@ export const logoutUserPage = async (req: Request, res: Response) => {
 
 export const getMe = async (req: Request, res: Response) => {
     try {
-        const refreshToken = req.cookies.refresh_token
         const accessToken = req.cookies.access_token
 
-        if (!refreshToken)
-            return res.status(401).json({ success: false, message: 'Unauthorized.' })
-
-        if (accessToken) {
-            const decodedAccessToken = await verifyJWTToken(accessToken)
-            if (decodedAccessToken) {
-                const shopInfo = await getShopByShopId(decodedAccessToken.sub)
-                if (!shopInfo)
-                    return res.status(500).json({ success: false, message: 'Something went wrong.' })
-
-                return res
-                    .status(200)
-                    .json({
-                        success: true,
-                        message: 'Authorized.',
-                        shopInfo
-                    })
-            }
+        if (!accessToken) {
+            return res.status(401).json({ success: false })
         }
 
-        return res.status(401).json({ success: false, message: 'Unauthorized.' })
+        const decoded = await verifyJWTToken(accessToken)
+        if (!decoded) {
+            return res.status(401).json({ success: false })
+        }
+
+        const shopInfo = await getShopByShopId(decoded.sub)
+        if (!shopInfo) {
+            return res.status(500).json({ success: false })
+        }
+
+        return res
+            .status(200)
+            .json({
+                success: true,
+                shopInfo
+            })
+
     } catch (err) {
         // console.log('Server Error:',err)
-        return res.status(500).json({ success: false, message: 'Internal server error.' })
+        return res.status(500).json({ success: false })
     }
 }
 
