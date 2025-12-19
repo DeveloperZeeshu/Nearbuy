@@ -138,7 +138,7 @@ const Home = () => {
                         <div
                             key={i}
                             className="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center 
-            gap-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            gap-2 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
                         >
                             <Icon className="text-slate-700" />
                             <p className="text-slate-600">{text}</p>

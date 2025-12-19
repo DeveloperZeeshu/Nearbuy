@@ -6,6 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../../components/ui/button/Button'
 import apiClient from '../../api/apiClient'
 import SearchPageSkeleton from './SearchPageSkeleton'
+import { ArrowLeft } from 'lucide-react'
 
 interface SearchedProductInfo {
     _id?: string
@@ -81,6 +82,14 @@ const SearchPage = () => {
     if (loading)
         return (
             <Container>
+                <div className='w-full'>
+                    <button
+                        onClick={() => navigate('/')}
+                        className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
+                    ><ArrowLeft size={18} />
+                        Back to Home
+                    </button>
+                </div>
                 <SearchPageSkeleton />
             </Container>
         )
@@ -109,6 +118,14 @@ const SearchPage = () => {
     return (
         <>
             <Container>
+                <div className='w-full'>
+                    <button
+                        onClick={() => navigate('/')}
+                        className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
+                    ><ArrowLeft size={18} />
+                        Back to Home
+                    </button>
+                </div>
                 <div className='min-h-screen'>
                     <div className="text-center mb-6">
                         <h2 className="text-3xl text-slate-800 font-bold">🔍Find What You Need, Nearby.</h2>

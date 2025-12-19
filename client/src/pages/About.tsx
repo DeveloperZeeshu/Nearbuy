@@ -8,7 +8,7 @@ const About = () => {
     return (
         <Container>
             <div
-                className='w-full min-h-screen flex flex-col gap-6 p-3 lg:p-5 mx-auto'>
+                className='w-full min-h-screen flex flex-col gap-6 mx-auto'>
 
                 <div>
                     <h1 className='text-3xl font-bold text-gray-800 text-center'>
@@ -39,17 +39,17 @@ const About = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4'>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white text-center shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 duration-300'>
                         <Search />
                         <p className='font-semibold mt-2'>Smart Search</p>
                         <p className='text-sm text-gray-600'>Find products nearby instantly</p>
                     </div>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white text-center shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 duration-300'>
                         <MapPin />
                         <p className='font-semibold mt-2'>Live Distance</p>
                         <p className='text-sm text-gray-600'>View shop distance in real-time</p>
                     </div>
-                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white/70 backdrop:blur-xl text-center shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300'>
+                    <div className='p-4 flex flex-col justify-center items-center rounded-lg bg-white text-center shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 duration-300'>
                         <Store />
                         <p className='font-semibold mt-2'>For Local Shops</p>
                         <p className='text-sm text-gray-600'>Powerful shop management dashboard</p>
