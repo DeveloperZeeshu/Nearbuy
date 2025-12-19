@@ -27,7 +27,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({
 
             <select
                 id={id}
-                className={`border-2 focus:border-black border-gray-300 rounded-md px-3 py-[.55rem] cursor-pointer overflow-x-hidden ${className}`}
+                className={`border border-gray-300 rounded-md px-3 py-[.55rem] cursor-pointer bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black overflow-x-hidden ${className}`}
                 {...props}
                 ref={ref}>
                 {

@@ -2,7 +2,7 @@ import SearchedProductCardSkeleton from "../../components/ui/SearchedProductCard
 
 const SearchPageSkeleton = () => {
     return (
-        <div className="bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5 animate-pulse">
+        <div className="min-h-screen animate-pulse">
 
             {/* Header Skeleton */}
             <div className="text-center mb-6">

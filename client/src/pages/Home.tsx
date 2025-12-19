@@ -46,7 +46,7 @@ const Home = () => {
     };
     return (
         <Container>
-            <div className="bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5">
+            <div className="min-h-screen">
 
                 {/* HERO CARD */}
                 <motion.div
@@ -66,8 +66,8 @@ const Home = () => {
                         </p>
 
                         {/* LOCATION PILL */}
-                        <div className="mt-4 inline-flex items-center gap-2 text-sm bg-white/70 
-          backdrop-blur px-4 py-1.5 rounded-full shadow-sm">
+                        <div className="mt-4 inline-flex items-center gap-2 text-sm bg-white 
+         px-4 py-1.5 rounded-full shadow-sm">
                             <MapPin size={18} className="text-slate-700" />
                             <span className="text-slate-700">
                                 <span className="font-medium">Your location:</span> Jaipur
@@ -81,7 +81,7 @@ const Home = () => {
                         initial="hidden"
                         animate="show"
                         onSubmit={handleSubmit(onSubmit)}
-                        className="mx-auto max-w-4xl bg-white/70 backdrop:blur-xl rounded-xl shadow-sm 
+                        className="mx-auto max-w-4xl bg-white rounded-xl shadow-sm 
           p-4 lg:p-5 flex flex-col lg:flex-row gap-4"
                     >
                         {/* PRODUCT SEARCH */}
@@ -108,8 +108,8 @@ const Home = () => {
                                 {...register("radius")}
                                 defaultValue="5000"
                                 id="radius"
-                                className="w-full border-2 focus:border-black border-gray-300 
-              rounded-md px-3 py-[.55rem] bg-gray-50"
+                                className="w-full border border-gray-300 
+              rounded-md px-3 py-[.55rem] bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black"
                             >
                                 <option value="5000">Within 5 km</option>
                                 <option value="10000">Within 10 km</option>
@@ -137,7 +137,7 @@ const Home = () => {
                     ].map(({ icon: Icon, text }, i) => (
                         <div
                             key={i}
-                            className="bg-white/70 backdrop:blur-xl rounded-xl shadow-sm p-4 flex flex-col items-center 
+                            className="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center 
             gap-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                         >
                             <Icon className="text-slate-700" />

@@ -4,7 +4,7 @@ const Skeleton = ({ className }: { className: string }) => (
 
 const DashboardSkeleton = () => {
     return (
-        <div className="w-full bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5">
+        <div className="min-h-screen">
 
             {/* HEADER */}
             <div className="flex justify-between items-center mb-10">
@@ -16,17 +16,7 @@ const DashboardSkeleton = () => {
             </div>
 
             {/* STAT CARDS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 mb-10">
-                {Array.from({ length: 4 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="p-3 lg:p-5 rounded-lg bg-white"
-                    >
-                        <Skeleton className="h-4 w-20 mb-3" />
-                        <Skeleton className="h-8 w-24" />
-                    </div>
-                ))}
-            </div>
+            <StatCardSkeleton />
 
             {/* QUICK ACTIONS */}
             <div className="flex flex-wrap gap-4 mb-10">
@@ -105,3 +95,20 @@ export const DashboardProductsSkeleton = () => {
         </div>
     )
 }
+
+export const StatCardSkeleton = () => {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 mb-10">
+            {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="p-3 lg:p-5 rounded-lg bg-white"
+                >
+                    <Skeleton className="h-4 w-20 mb-3" />
+                    <Skeleton className="h-8 w-24" />
+                </div>
+            ))}
+        </div>
+    )
+}
+

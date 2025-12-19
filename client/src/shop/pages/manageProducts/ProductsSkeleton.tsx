@@ -1,7 +1,7 @@
 
 const ProductsSkeleton = () => {
     return (
-        <div className="bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 p-3 lg:p-5 rounded-xl shadow-md min-h-screen animate-pulse">
+        <div className="min-h-screen animate-pulse">
 
             {/* HEADER SKELETON */}
             <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

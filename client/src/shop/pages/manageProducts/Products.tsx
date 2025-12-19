@@ -33,7 +33,7 @@ const ManageProducts = () => {
 
     return (
         <Container>
-            <div className="bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 p-3 lg:p-5 rounded-xl shadow-md min-h-screen">
+            <div className="min-h-screen">
                 {/* HEADER */}
                 <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
@@ -56,7 +56,7 @@ const ManageProducts = () => {
                                 placeholder="Search products..."
                                 value={search}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-                                className="w-full h-10 pl-10 pr-4 rounded-md border border-gray-300 bg-gray-50 shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                className="w-full h-10 pl-10 pr-4 rounded-md border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
                             />
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700">
                                 <Search size={19} />

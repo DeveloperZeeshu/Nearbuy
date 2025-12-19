@@ -1,7 +1,7 @@
 import Container from "../../../components/container/Container";
 import { useEffect, useState } from "react";
-import DashboardSkeleton, { DashboardProductsSkeleton } from "./DashboardSkeleton";
-import { Search } from "lucide-react";
+import DashboardSkeleton, { DashboardProductsSkeleton, StatCardSkeleton } from "./DashboardSkeleton";
+import { Plus, Search } from "lucide-react";
 import { useAppContext } from "../../../context/AppContext";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -34,7 +34,7 @@ const ShopDashboard = () => {
 
     return (
         <Container>
-            <div className="bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 p-3 lg:p-5 rounded-xl shadow-md min-h-screen">
+            <div className="min-h-screen">
 
                 {/* HEADER */}
                 <div className="flex justify-between items-center mb-10">
@@ -53,29 +53,35 @@ const ShopDashboard = () => {
                 </div>
 
                 {/* STAT CARDS */}
-                <StatCard
-                    totalProducts={products.length}
-                    totalInStock={products.reduce((acc, p) => acc += p.isAvailable ? 1 : 0, 0)}
-                    totalOutofStock={products.reduce((acc, p) => acc += !p.isAvailable ? 1 : 0, 0)}
-                />
+                {
+                    productsLoading ?
+                        <StatCardSkeleton /> :
+                        <StatCard
+                            totalProducts={products.length}
+                            totalInStock={products.reduce((acc, p) => acc += p.isAvailable ? 1 : 0, 0)}
+                            totalOutofStock={products.reduce((acc, p) => acc += !p.isAvailable ? 1 : 0, 0)}
+                        />
+                }
+
 
                 {/* QUICK ACTIONS */}
                 <div className="flex flex-wrap gap-4 mb-10">
                     <button
                         onClick={openProductForm}
-                        className="px-5 py-2.5 rounded-lg bg-linear-to-r from-black to-gray-800 text-white text-sm font-medium active:scale-95 transition">
-                        + Add Product
+                        className="px-4 py-2.5 rounded-lg bg-linear-to-r from-black to-gray-800 text-white text-sm font-medium active:scale-95 transition flex justify-center items-center gap-1">
+                        <Plus size={18} />
+                        <span>Add Product</span>
                     </button>
 
                     <Link
                         to='/shop/products'
-                        className="px-5 py-2.5 rounded-lg bg-white/80 backdrop-blur shadow active:scale-95 transition">
+                        className="px-5 py-2.5 rounded-lg bg-white backdrop-blur shadow active:scale-95 transition border border-gray-100 hover:bg-gray-50">
                         View All Products
                     </Link>
 
                     <Link
                         to='/shop/edit-profile'
-                        className="px-5 py-2.5 rounded-lg bg-white/80 backdrop-blur shadow active:scale-95 transition">
+                        className="px-5 py-2.5 rounded-lg bg-white backdrop-blur shadow active:scale-95 transition border border-gray-100 hover:bg-gray-50">
                         Edit Shop Profile
                     </Link>
                 </div>
@@ -88,7 +94,7 @@ const ShopDashboard = () => {
                     />
 
                     {/* PRODUCTS */}
-                    <div className="lg:col-span-2 bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm">
+                    <div className="lg:col-span-2 bg-white rounded-lg p-3 lg:p-5 shadow-sm border border-gray-200">
                         {
                             productsLoading ?
                                 <DashboardProductsSkeleton /> :
@@ -113,7 +119,7 @@ const ShopDashboard = () => {
                                         {filtered.slice(0, 5).map((item) => (
                                             <div
                                                 key={item._id}
-                                                className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all"
+                                                className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-white shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all border border-gray-100"
                                             >
                                                 <div>
                                                     <p className="font-semibold text-slate-800">
@@ -145,14 +151,14 @@ const ShopDashboard = () => {
                 {/* BOTTOM PANELS */}
                 <div className="grid md:grid-cols-2 gap-3 lg:gap-5 mt-3 lg:mt-5">
 
-                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
+                    <div className="bg-white rounded-lg p-3 lg:p-5 shadow-sm transition border border-gray-200">
                         <h3 className="font-semibold mb-3 text-lg">Recent Orders</h3>
                         <p className="text-sm text-slate-500">
                             No recent orders yet.
                         </p>
                     </div>
 
-                    <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
+                    <div className="bg-white rounded-lg p-3 lg:p-5 shadow-sm transition border border-gray-200">
                         <h3 className="font-semibold mb-4 text-lg">Quick Actions</h3>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -160,7 +166,7 @@ const ShopDashboard = () => {
                                 Update Hours
                             </button>
 
-                            <button className="bg-white py-3 rounded-lg active:scale-95 transition shadow-sm">
+                            <button className="bg-white py-3 rounded-lg active:scale-95 transition shadow-sm border border-gray-100 hover:bg-gray-50">
                                 Go to Settings
                             </button>
                         </div>
@@ -197,7 +203,7 @@ export const StatCard = ({
             {stats.map((item, i) => (
                 <div
                     key={i}
-                    className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                    className="bg-white rounded-lg p-3 lg:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer border border-gray-200"
                 >
                     <p className="text-sm text-slate-500 mb-1">{item.label}</p>
                     <p className="text-3xl font-bold text-slate-800">
@@ -212,7 +218,7 @@ export const StatCard = ({
 //ShopInfo Component
 export const ShopInfoCard = ({ shop }: { shop: ShopInfo | null }) => {
     return (
-        <div className="bg-white/70 backdrop-blur-xl rounded-lg p-3 lg:p-5 shadow-sm transition">
+        <div className="bg-white rounded-lg p-3 lg:p-5 shadow-sm transition border border-gray-200">
             <h3 className="font-semibold text-slate-800 mb-4 text-lg">
                 Shop Info
             </h3>

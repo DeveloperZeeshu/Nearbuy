@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom"
 const ShopFormSkeleton = () => {
     const navigate = useNavigate()
     return (
-        <div className="w-full flex flex-col items-center bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5">
+        <div className="min-h-screen flex flex-col items-center">
             <div className='w-full md:w-xl lg:w-4xl pl-3 lg:pl-0'>
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/shop/dashboard')}
                     className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
                 ><ArrowLeft size={18} />
                     Back to Home

@@ -14,6 +14,7 @@ import LoadingButton from '../ui/button/LoadingButton.js'
 import apiClient from '../../api/apiClient.js'
 import { loginValidationSchema, type LoginFormData } from '../../validator/auth_validator.js'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowLeft } from 'lucide-react'
 
 const SignIn = () => {
     const {
@@ -46,14 +47,14 @@ const SignIn = () => {
 
     return (
         <div className='w-full flex flex-col items-center'>
-            {/* <div className='w-full max-w-118 lg:w-118'>
+            <div className='w-full max-w-118 lg:w-118'>
                 <button
                     onClick={() => navigate('/')}
                     className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
                 ><ArrowLeft size={18} />
                     Back to Home
                 </button>
-            </div> */}
+            </div>
             <motion.div
                 variants={fromLeftVariants}
                 initial='hidden'

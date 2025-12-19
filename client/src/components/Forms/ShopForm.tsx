@@ -16,6 +16,7 @@ import { registerValidationSchema, updateProfileSchema, type RegisterFormData, t
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDispatch } from 'react-redux'
 import { updateProfile } from '../../store/authSlice.js'
+import { ArrowLeft } from 'lucide-react'
 
 interface ShopInfoProps {
     shopInfo?: ShopInfo | null
@@ -92,14 +93,14 @@ const ShopForm = ({ shopInfo }: ShopInfoProps) => {
 
     return (
         <div className='w-full flex flex-col items-center'>
-            {/* <div className='w-full md:w-xl lg:w-4xl'>
+            <div className='w-full md:w-xl lg:w-4xl'>
                 <button
                     onClick={() => navigate(shopInfo ? '/shop/dashboard' : '/')}
                     className='text-sm mb-2 text-blue-600 font-semibold hover:text-blue-500 flex gap-.5 items-center cursor-pointer'
                 ><ArrowLeft size={18} />
                     Back to Home
                 </button>
-            </div> */}
+            </div>
             <motion.div
                 variants={fromLeftVariants}
                 initial='hidden'

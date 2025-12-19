@@ -89,7 +89,7 @@ const SearchPage = () => {
         return (
             <Container>
                 <div
-                    className='flex flex-col items-center bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5'>
+                    className='flex flex-col items-center min-h-screen'>
                     <img
                         src='/noProductFound.svg'
                         alt='no product found nearby'
@@ -109,7 +109,7 @@ const SearchPage = () => {
     return (
         <>
             <Container>
-                <div className='bg-linear-to-br from-slate-100 via-slate-200 to-slate-300 min-h-screen rounded-xl shadow-md p-3 lg:p-5'>
+                <div className='min-h-screen'>
                     <div className="text-center mb-6">
                         <h2 className="text-3xl text-slate-800 font-bold">🔍Find What You Need, Nearby.</h2>
                         <p className="text-gray-500 text-sm mt-1">Showing products available near your location.</p>

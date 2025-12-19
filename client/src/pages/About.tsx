@@ -2,18 +2,13 @@ import { useNavigate } from 'react-router-dom'
 import Container from '../components/container/Container'
 import Button from '../components/ui/button/Button'
 import { MapPin, Search, Store } from 'lucide-react'
-import { motion } from 'motion/react'
-import { fromLeftVariants } from '../animations/fromLeftVariants'
 
 const About = () => {
     const navigate = useNavigate()
     return (
         <Container>
-            <motion.div
-                variants={fromLeftVariants}
-                initial='hidden'
-                animate='show'
-                className='w-full min-h-screen flex flex-col gap-6 p-3 lg:p-5 rounded-xl shadow-md mx-auto bg-linear-to-br from-slate-100 via-slate-200 to-slate-300'>
+            <div
+                className='w-full min-h-screen flex flex-col gap-6 p-3 lg:p-5 mx-auto'>
 
                 <div>
                     <h1 className='text-3xl font-bold text-gray-800 text-center'>
@@ -72,7 +67,7 @@ const About = () => {
                     />
                 </div>
 
-            </motion.div>
+            </div>
 
         </Container>
     )

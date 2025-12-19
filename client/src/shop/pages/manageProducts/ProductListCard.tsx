@@ -42,7 +42,7 @@ const ProductListCard = ({ product }: ProductListPropType) => {
 
     return (
         <div
-            className="bg-white rounded-lg shadow-sm hover:shadow-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 lg:gap-15 transition-all duration-300"
+            className="bg-white rounded-lg shadow-sm hover:shadow-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 lg:gap-15 transition-all duration-300 border border-gray-200"
         >
             {/* PRODUCT INFO */}
             <div className="flex items-center gap-3 flex-1">
