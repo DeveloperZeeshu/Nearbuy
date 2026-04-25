@@ -40,6 +40,7 @@ interface AccessTokenType {
 
 export interface AccessTokenPayload {
     sub: string
+    sid: string
     name: string
     email: string
     iat: number
